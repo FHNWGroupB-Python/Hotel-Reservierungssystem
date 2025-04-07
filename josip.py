@@ -4,6 +4,7 @@ class Payment:
 
 
 class Booking:
+    def __init__
 
 class Facilities:
     def __init__(self):
