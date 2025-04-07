@@ -1,3 +1,0 @@
-print("HelloPyCharm")
-
-print("HelloWorld")
