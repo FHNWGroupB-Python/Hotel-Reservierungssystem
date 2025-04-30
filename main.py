@@ -36,7 +36,7 @@ class Room:
         self.room_number = room_number
         self.room_type = room_type
         self.__price_per_night = price_per_night # privates Attribut
-        self.hotel = hotel
+        self.hotel = Hotel
 
     def __str__(self):
         return (', '.join(f'{key}: {value}' for key, value in vars(self).items()))
