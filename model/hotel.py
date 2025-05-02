@@ -1,4 +1,5 @@
 from model.room import Room
+from model.facility import Facilities
 
 class Hotel:
     def __init__(self, hotelid:int, hotel_name:str, street:str, city:str, zip_code:int, country:str, stars:int, number_of_rooms:int):
@@ -22,11 +23,11 @@ class Hotel:
             for i in range(1, number_of_rooms + 1)
         ]
     # Assoziation: (Dienste können unabhängig existieren)
-        self.services = []
+        self.facilities = []
 
     def add_room(self, room: "Room"):
         room.hotel = self
         self.rooms.append(room)
 
-    #def add_service(self, service):
-    #    self.services.append(service)
+    def add_facility(self, facility: "Facilities"):
+        self.facilities.append(facility)
