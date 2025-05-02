@@ -1,3 +1,5 @@
+from model.booking import Booking
+
 class Invoice:
     def __init__(self, invoiceid:int, amount:str, status:str, invoice_date:str, booking: "Booking" = None):
         self.invoiceid = invoiceid

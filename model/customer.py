@@ -1,3 +1,5 @@
+from model.booking import Booking
+
 class Customer:
     def __init__(self, customerid:int, first_name:str, last_name:str, phone:str, email:str):
         self.customerid = customerid

@@ -1,3 +1,9 @@
+from model.hotel import Hotel
+from model.invoice import Invoice
+from model.customer import Customer
+from model.payment_method import Payment
+
+
 class Booking:
     def __init__ (self, bookingid: int, number_of_guest:int, check_in: str, check_out: str, status: str, hotel: "Hotel"):
         self.bookingid = bookingid

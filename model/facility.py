@@ -1,3 +1,5 @@
+from model.hotel import Hotel
+
 class Facilities:
     def __init__(self, facilityid: int, facility: str):
         self.facilityid = facilityid
