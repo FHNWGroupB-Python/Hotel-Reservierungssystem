@@ -1,4 +1,4 @@
-class address:
+class Address:
     def __init__(self, adressid:int, street:str, zip_code:int, city:str, country:str):
         self.adressid = adressid
         self.street = street

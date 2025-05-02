@@ -1,5 +1,7 @@
 from model.room import Room
 from model.facility import Facilities
+from model.address import Address
+from model.booking import Booking
 
 class Hotel:
     def __init__(self, hotelid:int, hotel_name:str, street:str, city:str, zip_code:int, country:str, stars:int, number_of_rooms:int):
@@ -11,7 +13,7 @@ class Hotel:
         self.country = country
         self.stars = stars
         self.number_of_rooms = number_of_rooms
-    # Komposition (Das Zimmer gehört fest zu einem Hotel)
+        self.address = Address # Aggregation (Adresse existiert unabhängig vom Hotel)
         self.rooms = [
             Room(
                 roomid = i,
@@ -21,9 +23,9 @@ class Hotel:
                 hotel = self
             )
             for i in range(1, number_of_rooms + 1)
-        ]
-    # Assoziation: (Dienste können unabhängig existieren)
-        self.facilities = []
+        ] # Komposition (Das Zimmer gehört fest zu einem Hotel)
+        self.bookings = [] # Komposition (Buchung gehört fest zu einem Hotel)
+        self.facilities = [] # Assoziation: (Dienste können unabhängig existieren)
 
     def add_room(self, room: "Room"):
         room.hotel = self
@@ -31,3 +33,7 @@ class Hotel:
 
     def add_facility(self, facility: "Facilities"):
         self.facilities.append(facility)
+
+    def add_booking(self, booking: "Booking"):
+        booking.hotel = self
+        self.bookings.append(booking)
