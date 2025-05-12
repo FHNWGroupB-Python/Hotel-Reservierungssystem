@@ -1,6 +1,5 @@
 from model.room import Room
 from model.facility import Facilities
-from model.address import Address
 from model.booking import Booking
 
 class Hotel:
@@ -13,7 +12,6 @@ class Hotel:
         self.__country = country
         self.__stars = stars
         self.__number_of_rooms = number_of_rooms
-        self.address = Address # Aggregation (Adresse existiert unabhängig vom Hotel)
         self.rooms = [
             Room(
                 roomid = i,
