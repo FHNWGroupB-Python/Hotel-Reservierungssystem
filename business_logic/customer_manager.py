@@ -1,3 +1,7 @@
+import model
+import data_access
+
+
 class CustomerManager:
     def __init__(self):
         self.__customer_da = data_access.CustomerDataAccess()
