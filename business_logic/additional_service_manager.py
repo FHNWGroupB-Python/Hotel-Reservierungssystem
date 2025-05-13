@@ -1,3 +1,6 @@
+import model
+import data_access
+
 class AdditionalServiceManager:
     def __init__(self):
         self.__service_da = data_access.AdditionalServiceDataAccess()

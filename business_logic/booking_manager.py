@@ -1,3 +1,7 @@
+import model
+import data_access
+
+
 class BookingManager:
     def __init__(self):
         self.__booking_da = data_access.BookingDataAccess()

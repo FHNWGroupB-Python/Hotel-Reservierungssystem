@@ -1,3 +1,6 @@
+import model
+import data_access
+
 class PaymentMethodManager:
     def __init__(self):
         self.__payment_da = data_access.PaymentMethodDataAccess()
