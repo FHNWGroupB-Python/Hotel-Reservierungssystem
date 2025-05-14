@@ -55,7 +55,6 @@ class HotelDAL(BaseDAL):
             hotel.number_of_rooms,
             hotel.hotelid
         ])
-
         last_row_id, row_count = self.execute_sql(sql, params)
 
     def delete_hotel(self, hotel_id: int) -> None:
@@ -65,5 +64,5 @@ class HotelDAL(BaseDAL):
         sql = """
         DELETE FROM Hotel WHERE hotelid = ?
         """
-        # SQL-Statement ausführen
-        self.execute_sql(sql, (hotel_id,))
+        params = tuple([hotel_id])
+        last_row_id, row_count = self.execute(sql, params)
