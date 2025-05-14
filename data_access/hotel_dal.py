@@ -8,6 +8,21 @@ class HotelDAL(BaseDAL):
         super().__init__(db_path)
 
     def create_hotel(self, hotel_name:str, street:str, city:str, zip_code:int, country:str, stars:int, number_of_rooms:int) -> model.Hotel:
+        if not hotel_name or not isinstance(hotel_name, str):
+            raise ValueError("Hotel name can't be None or empty.")
+        if not street or not isinstance(street, str):
+            raise ValueError("Street can't be None or empty.")
+        if not city or not isinstance(city, str):
+            raise ValueError("City can't be None or empty.")
+        if not zip_code or zip_code <= 0:
+            raise ValueError("Zip code need's to be a positive integer.")
+        if not country or not isinstance(country, str):
+            raise ValueError("Country can't be None or empty.")
+        if not isinstance(stars, int) or stars < 1 or stars > 5:
+            raise ValueError("Stars need's to be an integer between 1 and 5.")
+        if not isinstance(number_of_rooms, int) or number_of_rooms <= 0:
+            raise ValueError("Number of rooms must be a positive integer.")
+
         sql = """
         INSERT INTO Hotel (hotel_name, street, city, zip_code, country, stars, number_of_rooms) VALUES (?,?,?,?,?,?,?)
         """
@@ -43,4 +58,12 @@ class HotelDAL(BaseDAL):
 
         last_row_id, row_count = self.execute_sql(sql, params)
 
+    def delete_hotel(self, hotel_id: int) -> None:
+        if not hotel_id:
+            raise ValueError("Hotel ID cannot be None or zero.")
 
+        sql = """
+        DELETE FROM Hotel WHERE hotelid = ?
+        """
+        # SQL-Statement ausführen
+        self.execute_sql(sql, (hotel_id,))
