@@ -66,3 +66,62 @@ class HotelDAL(BaseDAL):
         """
         params = tuple([hotel_id])
         last_row_id, row_count = self.execute(sql, params)
+
+    def search_by_city(self, city: str) -> list[model.Hotel]:
+        if not city or not isinstance(city, str):
+            raise ValueError("City must be a non-empty string.")
+
+        sql = """
+        SELECT hotelid, hotel_name, street, city, zip_code, country, stars, number_of_rooms FROM Hotel WHERE city = ?
+        """
+        params = (city,)
+        rows = self.fetchall(sql, (city,))
+
+        # Falls keine Ergebnisse gefunden werden, leere Liste zurückgeben
+        if not rows:
+            return []
+
+        # Ergebnisse in Hotel-Objekte umwandeln
+        hotels = []
+        for row in rows:
+            hotels.append(model.Hotel(
+                hotelid=row[0],
+                hotel_name=row[1],
+                street=row[2],
+                city=row[3],
+                zip_code=row[4],
+                country=row[5],
+                stars=row[6],
+                number_of_rooms=row[7]
+            ))
+        return hotels
+
+    def search_by_stars(self, stars: int) -> list[model.Hotel]:
+        if not isinstance(stars, int) or stars < 1 or stars > 5:
+            raise ValueError("Stars must be an integer between 1 and 5.")
+
+        sql = """
+        SELECT hotelid, hotel_name, street, city, zip_code, country, stars, number_of_rooms FROM Hotel WHERE stars = ?
+        """
+        params = (stars, )
+        rows = self.fetchall(sql, (stars,))
+
+        # Falls keine Ergebnisse gefunden werden, leere Liste zurückgeben
+        if not rows:
+            return []
+
+        # Ergebnisse in Hotel-Objekte umwandeln
+        hotels = []
+        for row in rows:
+            hotels.append(model.Hotel(
+                hotelid=row[0],
+                hotel_name=row[1],
+                street=row[2],
+                city=row[3],
+                zip_code=row[4],
+                country=row[5],
+                stars=row[6],
+                number_of_rooms=row[7]
+            ))
+
+        return hotels
