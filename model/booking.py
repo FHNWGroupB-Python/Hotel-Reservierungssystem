@@ -1,7 +1,11 @@
-from model.hotel import Hotel
-from model.invoice import Invoice
-from model.customer import Customer
-from model.payment_method import Payment
+from __future__ import annotations
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+
+    from model.hotel import Hotel
+    from model.invoice import Invoice
+    from model.customer import Customer
+    from model.payment_method import Payment
 
 
 class Booking:

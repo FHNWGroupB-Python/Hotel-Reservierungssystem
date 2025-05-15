@@ -1,4 +1,8 @@
-from model.booking import Booking
+from __future__ import annotations
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+
+    from model.booking import Booking
 
 class Customer:
     def __init__(self, customerid:int, first_name:str, last_name:str, phone:str, email:str):

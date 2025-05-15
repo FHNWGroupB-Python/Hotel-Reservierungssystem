@@ -1,5 +1,9 @@
-from model.additional_service import AdditionalService
-from model.hotel import Hotel
+from __future__ import annotations
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+
+    from model.additional_service import AdditionalService
+    from model.hotel import Hotel
 
 class Room:
     def __init__(self, roomid:int, room_number:int, room_type:str, price_per_night:float, hotel:"Hotel"):

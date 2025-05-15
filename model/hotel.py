@@ -1,6 +1,10 @@
-from model.room import Room
-from model.facility import Facilities
-from model.booking import Booking
+from __future__ import annotations
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+
+    from model.room import Room
+    from model.facility import Facilities
+    from model.booking import Booking
 
 class Hotel:
     def __init__(self, hotelid:int, hotel_name:str, street:str, city:str, zip_code:int, country:str, stars:int, number_of_rooms:int):

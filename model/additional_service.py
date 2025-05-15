@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 class AdditionalService:
     def __init__(self, additionalserviceid, additional_service, additional_service_price):
         self.additionalserviceid = additionalserviceid
