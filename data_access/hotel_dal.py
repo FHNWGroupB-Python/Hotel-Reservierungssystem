@@ -123,5 +123,5 @@ class HotelDAL(BaseDAL):
                 stars=row[6],
                 number_of_rooms=row[7]
             ))
-
         return hotels
+
