@@ -67,7 +67,7 @@ class HotelDAL(BaseDAL):
         params = tuple([hotel_id])
         last_row_id, row_count = self.execute(sql, params)
 
-    def search_by_city(self, city: str) -> list[model.Hotel]:
+    def search_hotels_by_city(self, city: str) -> list[model.Hotel]:
         if not city or not isinstance(city, str):
             raise ValueError("City must be a non-empty string.")
 
@@ -96,7 +96,7 @@ class HotelDAL(BaseDAL):
             ))
         return hotels
 
-    def search_by_stars(self, stars: int) -> list[model.Hotel]:
+    def search_hotels_by_stars(self, stars: int) -> list[model.Hotel]:
         if not isinstance(stars, int) or stars < 1 or stars > 5:
             raise ValueError("Stars must be an integer between 1 and 5.")
 

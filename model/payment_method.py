@@ -4,7 +4,7 @@ if TYPE_CHECKING:
 
     from model.booking import Booking
 
-class Payment:
+class PaymentMethod:
     def __init__ (self, paymentid: int, additional_service: str):
         self.paymentid = paymentid
         self.additional_service = additional_service

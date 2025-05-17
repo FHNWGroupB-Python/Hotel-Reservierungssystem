@@ -3,7 +3,7 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
 
     from model.room import Room
-    from model.facility import Facilities
+    from model.facility import Facility
     from model.booking import Booking
 
 class Hotel:

@@ -5,10 +5,10 @@ from .base_dal import BaseDAL
 from .additional_service_dal import AdditionalServiceDAL
 from .booking_dal import BookingDAL
 from .customer_dal import CustomerDAL
-from .facility_dal import FacilitiesDAL
+from .facility_dal import FacilityDAL
 from .hotel_dal import HotelDAL
 from .invoice_dal import InvoiceDAL
-from .payment_method_dal import PaymentDAL
+from .payment_method_dal import PaymentMethodDAL
 from .room_dal import RoomDAL
 
 

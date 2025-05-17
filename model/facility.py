@@ -4,7 +4,7 @@ if TYPE_CHECKING:
 
     from model.hotel import Hotel
 
-class Facilities:
+class Facility:
     def __init__(self, facilityid: int, facility: str):
         self.facilityid = facilityid
         self.facility = facility

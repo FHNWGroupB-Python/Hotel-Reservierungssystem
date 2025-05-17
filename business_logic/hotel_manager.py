@@ -26,3 +26,9 @@ class HotelManager():
             hotel_list.append(hotel)
 
         return hotel_list
+
+    def search_hotels_by_city(self, city: str):
+        return self.__hotel_dal.search_hotels_by_city(city)
+
+    def search_hotels_by_stars(self, stars: int):
+        return self.__hotel_dal.search_hotels_by_stars(stars)
