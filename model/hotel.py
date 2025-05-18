@@ -27,14 +27,14 @@ class Hotel:
             for i in range(1, number_of_rooms + 1)
         ] # Komposition (Das Zimmer gehört fest zu einem Hotel)
         self.bookings = [] # Komposition (Buchung gehört fest zu einem Hotel)
-        self.facilities = [] # Assoziation: (Dienste können unabhängig existieren)
+        self.facility = [] # Assoziation: (Dienste können unabhängig existieren)
 
     def add_room(self, room: "Room"):
         room.hotel = self
         self.rooms.append(room)
 
-    def add_facility(self, facility: "Facilities"):
-        self.facilities.append(facility)
+    def add_facility(self, facility: "Facility"):
+        self.facility.append(facility)
 
     def add_booking(self, booking: "Booking"):
         booking.hotel = self
@@ -117,5 +117,3 @@ class Hotel:
         if not 1 <= stars <= 5:
             raise ValueError("stars must be between 1 and 5")
         self.__stars = stars
-
-
