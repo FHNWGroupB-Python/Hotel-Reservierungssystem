@@ -1,34 +1,55 @@
 import model
 import data_access
 
-class HotelManager():
+
+class HotelManager:
     def __init__(self) -> None:
-        self.__hotel_dal = data_access.Hotel.DAL()
+        # Instanz der Data Access Layer Klasse (HotelDAL)
+        self.__hotel_dal = data_access.HotelDAL()
 
-    def create_hotel(self, hotel_name:str, street:str, city:str, zip_code:int, country:str, stars:int, number_of_rooms:int) ->model.Hotel:
-        return self.__hotel_dal.create_hotel(hotel_name, street, city, zip_code, country, stars, number_of_rooms)
+    def create_hotel(self, hotel_name: str, street: str, city: str, zip_code: int,
+                     country: str, stars: int, number_of_rooms: int) -> model.Hotel:
+        """
+        Erstellt ein neues Hotel und speichert es im HotelDAL.
+        """
+        if not hotel_name or not isinstance(hotel_name, str):
+            raise ValueError("Hotelname ist ungültig.")
+        if not city or not isinstance(city, str):
+            raise ValueError("Die Stadt darf nicht leer sein.")
+        if stars < 1 or stars > 5:
+            raise ValueError("Sterne müssen zwischen 1 und 5 liegen.")
 
-    def read_hotel(self) -> list[model.Hotel]:
-        hotels_data = self.__hotel_dal.get_all_hotels()
-        hotel_list = []
-
-        for hotel_data in hotels_data:
-            hotel = model.Hotel(
-                hotel_id=hotel_data["hotel_id"],
-                hotel_name=hotel_data["hotel_name"],
-                street=hotel_data["street"],
-                city=hotel_data["city"],
-                zip_code=hotel_data["zip_code"],
-                country=hotel_data["country"],
-                stars=hotel_data["stars"],
-                number_of_rooms=hotel_data["number_of_rooms"]
+        try:
+            # Übergibt die Eingaben an die Datenzugriffsfunktion
+            created_hotel = self.__hotel_dal.create_hotel(
+                hotel_name, street, city, zip_code, country, stars, number_of_rooms
             )
-            hotel_list.append(hotel)
+            print(f"Hotel '{hotel_name}' wurde erfolgreich erstellt.")
+            return created_hotel
+        except Exception as e:
+            print(f"Fehler beim Erstellen des Hotels: {e}")
+            raise
 
-        return hotel_list
+    def search_hotels_by_city(self, city: str) -> list[model.Hotel]:
+        """
+        Suche Hotels basierend auf der Stadt.
+        """
+        try:
+            if not city:
+                raise ValueError("Bitte geben Sie eine Stadt ein.")
+            return self.__hotel_dal.search_hotels_by_city(city)
+        except Exception as e:
+            print(f"Fehler bei der Suche nach Hotels in der Stadt '{city}': {e}")
+            raise
 
-    def search_hotels_by_city(self, city: str):
-        return self.__hotel_dal.search_hotels_by_city(city)
-
-    def search_hotels_by_stars(self, stars: int):
-        return self.__hotel_dal.search_hotels_by_stars(stars)
+    def search_hotels_by_stars(self, stars: int) -> list[model.Hotel]:
+        """
+        Suche Hotels nach Sternebewertung.
+        """
+        try:
+            if not isinstance(stars, int) or stars < 1 or stars > 5:
+                raise ValueError("Die Anzahl der Sterne muss zwischen 1 und 5 liegen.")
+            return self.__hotel_dal.search_hotels_by_stars(stars)
+        except Exception as e:
+            print(f"Fehler bei der Suche nach Hotels mit {stars} Sternen: {e}")
+            raise
