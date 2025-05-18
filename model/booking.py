@@ -5,20 +5,58 @@ if TYPE_CHECKING:
     from model.hotel import Hotel
     from model.invoice import Invoice
     from model.customer import Customer
-    from model.payment_method import Payment
+    from model.payment_method import PaymentMethod
 
 
 class Booking:
     def __init__ (self, bookingid: int, number_of_guest:int, check_in: str, check_out: str, status: str, hotel: "Hotel"):
-        self.bookingid = bookingid
-        self.number_of_guest = number_of_guest
-        self.check_in = check_in
-        self.check_out = check_out
-        self.status = status
+        self.__bookingid = bookingid
+        self.__number_of_guest = number_of_guest
+        self.__check_in = check_in
+        self.__check_out = check_out
+        self.__status = status
         self.hotel = hotel # Referenz auf Hotel
         self.invoice = None # Komposition (Rechnung ist fixer Bestandteil einer Buchung)
         self.customer = None # Assoziation (Customer)
         self.payment = None # Assoziation (Rechnungsmethode)
 
-    def __str__(self):
-        return (f"Buchungs ID: {self.bookingid}, Anzahl Gäste: {self.number_of_guest}, Checkin: {self.check_in}, Checkout: {self.check_out}, Status: {self.status}")
+    def add_invoice(self, invoice: "Invoice"):
+        self.invoice = invoice
+
+    def add_customer(self, customer: "Customer"):
+        self.customer = customer
+
+    def add_payment(self, payment: "PaymentMethod"):
+        self.payment = payment
+
+    @property
+    def bookingid(self):
+        return self.__bookingid
+
+    @property
+    def number_of_guest(self):
+        return self.__number_of_guest
+
+    @number_of_guest.setter
+    def number_of_guest(self, number_of_guest):
+        self.__number_of_guest = number_of_guest
+
+    @property
+    def check_in(self):
+        return self.__check_in
+
+    @check_in.setter
+    def check_in(self, check_in):
+        self.__check_in = check_in
+
+    @property
+    def check_out(self):
+        return self.__check_out
+
+    @check_out.setter
+    def check_out(self, check_out):
+        self.__check_out = check_out
+
+    @property
+    def status(self):
+        return self.__status
