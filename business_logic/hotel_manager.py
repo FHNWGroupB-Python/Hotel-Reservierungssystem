@@ -4,14 +4,9 @@ import data_access
 
 class HotelManager:
     def __init__(self) -> None:
-        # Instanz der Data Access Layer Klasse (HotelDAL)
         self.__hotel_dal = data_access.HotelDAL()
 
-    def create_hotel(self, hotel_name: str, street: str, city: str, zip_code: int,
-                     country: str, stars: int, number_of_rooms: int) -> model.Hotel:
-        """
-        Erstellt ein neues Hotel und speichert es im HotelDAL.
-        """
+    def create_hotel(self, hotel_name: str, street: str, city: str, zip_code: int, country: str, stars: int, number_of_rooms: int) -> model.Hotel:
         if not hotel_name or not isinstance(hotel_name, str):
             raise ValueError("Hotelname ist ungültig.")
         if not city or not isinstance(city, str):
@@ -20,7 +15,6 @@ class HotelManager:
             raise ValueError("Sterne müssen zwischen 1 und 5 liegen.")
 
         try:
-            # Übergibt die Eingaben an die Datenzugriffsfunktion
             created_hotel = self.__hotel_dal.create_hotel(
                 hotel_name, street, city, zip_code, country, stars, number_of_rooms
             )
@@ -31,9 +25,6 @@ class HotelManager:
             raise
 
     def search_hotels_by_city(self, city: str) -> list[model.Hotel]:
-        """
-        Suche Hotels basierend auf der Stadt.
-        """
         try:
             if not city:
                 raise ValueError("Bitte geben Sie eine Stadt ein.")
@@ -43,9 +34,6 @@ class HotelManager:
             raise
 
     def search_hotels_by_stars(self, stars: int) -> list[model.Hotel]:
-        """
-        Suche Hotels nach Sternebewertung.
-        """
         try:
             if not isinstance(stars, int) or stars < 1 or stars > 5:
                 raise ValueError("Die Anzahl der Sterne muss zwischen 1 und 5 liegen.")
