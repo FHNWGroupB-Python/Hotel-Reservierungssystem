@@ -2,8 +2,8 @@ from ui import gui  # Import der GUI-Funktionalität aus gui.py
 
 
 def main():
-    # Hier könntest du andere Logiken hinzufügen (z. B. Logging, Konfigurationen)
-    gui.start_gui()
+    # Starte die Anwendung mit dem Login-Fenster
+    gui.login_window()  # Ändere den Startpunkt auf die Login-Funktion
 
 
 # Überprüfen, ob die Datei direkt ausgeführt wird

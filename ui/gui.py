@@ -1,37 +1,58 @@
 import tkinter as tk
-from tkinter import messagebox
-from tkinter import ttk
-from business_logic import hotel_manager
+from tkinter import messagebox, ttk
 
-def start_gui():
-    # Fenster erstellen
+from business_logic.hotel_manager import HotelManager
+hotel_manager = HotelManager()
+
+# Benutzer-Datenbank mit Benutzerrollen (Admin/Benutzer)
+USERS = {
+    "admin": {"password": "admin", "role": "admin"},
+    "user": {"password": "user", "role": "user"}
+}
+
+
+def authenticate(username: str, password: str):
+    user = USERS.get(username)
+    if user and user["password"] == password:
+        return user["role"]
+    return None
+
+
+def logout_and_return_to_login(current_window):
+    current_window.quit()  # Schließt das aktuelle Fenster
+    login_window()  # Öffnet das Login-Fenster erneut
+
+
+### Benutzer-Dashboard
+def open_user_dashboard():
     root = tk.Tk()
-    root.title("Hotelreservierungssystem")
+    root.title("Hotelreservierungssystem - Benutzer")
     root.geometry("600x400")
 
-    # Begrüßungstext hinzufügen
-    label = tk.Label(root, text="Willkommen im Hotelreservierungssystem der Gruppe B2!", font=("Arial", 18))
+    # Begrüßungstext
+    label = tk.Label(root, text="Wilkommen im Hotelreservierungssystem der Gruppe B2!", font=("Arial", 18))
     label.pack(pady=10)
 
-    # Suchfeld erstellen
+    # Suchfelder
     search_frame = tk.Frame(root)
     search_frame.pack(pady=10, padx=20, anchor="w")
 
-    #Feld für Stadtsuche
+    # Stadtfeld
     city_label = tk.Label(search_frame, text="Stadt:", font=("Arial", 12))
     city_label.grid(row=0, column=0, padx=5, pady=5, sticky="w")
     city_entry = tk.Entry(search_frame, width=20)
     city_entry.grid(row=0, column=1, padx=5, pady=5)
 
-    # Sterneauswahl Dropdown
+    # Sterneauswahl
     stars_label = tk.Label(search_frame, text="Sterne (1-5):", font=("Arial", 12))
     stars_label.grid(row=0, column=2, padx=5, pady=5, sticky="w")
     selected_stars = tk.StringVar(value="Alle")
     stars_options = ["Alle", "1", "2", "3", "4", "5"]
-    stars_dropdown = ttk.Combobox(search_frame, textvariable=selected_stars, values=stars_options, state="readonly", width=10)
+    stars_dropdown = ttk.Combobox(search_frame, textvariable=selected_stars, values=stars_options, state="readonly",
+                                  width=10)
     stars_dropdown.grid(row=0, column=3, padx=5, pady=5)
 
-    # Suchergebnisse hinzufügen (Treeview)
+    # Suchergebnisse
     results_frame = tk.Frame(root)
     results_frame.pack(pady=10, padx=20)
 
@@ -45,8 +66,9 @@ def start_gui():
         tree.column(col, width=100)
     tree.pack(pady=10)
 
-    # Funktion, um Hotels zu suchen
+    # Hotelsuche
     def search_hotels():
+        # Stadt und Sterne aus den Suchfeldern abrufen
         city = city_entry.get()
         stars = selected_stars.get()
 
@@ -59,7 +81,6 @@ def start_gui():
                 messagebox.showwarning("Suche", "Bitte mindestens ein Kriterium eingeben!")
                 return
 
-            # Update der Ergebnisse in der Treeview
             tree.delete(*tree.get_children())
             for hotel in results:
                 tree.insert("", tk.END, values=(
@@ -72,14 +93,149 @@ def start_gui():
         except Exception as e:
             messagebox.showerror("Fehler", f"Fehler bei der Suche: {e}")
 
-    # Suchbutton hinzufügen
+    # Suchbutton
     search_button = tk.Button(root, text="Hotels durchsuchen", command=search_hotels)
     search_button.pack(pady=10)
 
-    # Event-Loop starten
+    # Logout-Button
+    logout_button = tk.Button(root, text="Logout", command=lambda: logout_and_return_to_login(root))
+    logout_button.pack(pady=10)
+
     root.mainloop()
 
 
-# Überprüfen, ob die Datei direkt ausgeführt wird
+### Admin-Dashboard: Daten verwalten und pflegen ###
+def open_admin_dashboard():
+    root = tk.Tk()
+    root.title("Admin Dashboard - Hotelverwaltung")
+    root.geometry("600x400")
+
+    tk.Label(root, text="Admin Dashboard - Hotelverwaltung", font=("Arial", 18)).pack(pady=10)
+
+    # Button im Admin-Dashboard hinzufügen, um das Formular zu öffnen
+    tk.Button(root, text="Neues Hotel erstellen", command=lambda: create_hotel_form(root)).pack(pady=5)
+
+def create_hotel_form(root):
+
+    def save_hotel():
+        hotel_name = hotel_name_var.get()
+        street = street_var.get()
+        city = city_var.get()
+        zip_code = zip_code_var.get()
+        country = country_var.get()
+        stars = stars_var.get()
+        number_of_rooms = number_of_rooms_var.get()
+
+        try:
+            # Validierung und Konvertierung der Eingaben
+            if not hotel_name or not city or not street or not country:
+                raise ValueError("Alle Felder müssen ausgefüllt sein.")
+
+            zip_code = int(zip_code)
+            stars = int(stars)
+            number_of_rooms = int(number_of_rooms)
+
+            if stars < 1 or stars > 5:
+                raise ValueError("Die Sterne müssen zwischen 1 und 5 liegen.")
+            if zip_code <= 0 or number_of_rooms <= 0:
+                raise ValueError("PLZ und Zimmeranzahl müssen positive Zahlen sein.")
+
+            # Hotel mit dem HotelManager erstellen
+            new_hotel = hotel_manager.create_hotel(
+                hotel_name=hotel_name,
+                street=street,
+                city=city,
+                zip_code=zip_code,
+                country=country,
+                stars=stars,
+                number_of_rooms=number_of_rooms,
+            )
+            messagebox.showinfo("Erfolg", f"Hotel '{new_hotel.hotel_name}' wurde erfolgreich erstellt!")
+            form_window.quit()
+        except ValueError as v_err:
+            messagebox.showerror("Validierungsfehler", str(v_err))
+        except Exception as e:
+            messagebox.showerror("Fehler", f"Fehler beim Erstellen des Hotels: {e}")
+
+    # Erstelle das Formularfenster
+    form_window = tk.Toplevel(root)
+    form_window.title("Neues Hotel erstellen")
+
+    # Eingabefelder und Labels
+    tk.Label(form_window, text="Hotelname:").pack()
+    hotel_name_var = tk.StringVar()
+    tk.Entry(form_window, textvariable=hotel_name_var).pack()
+
+    tk.Label(form_window, text="Straße:").pack()
+    street_var = tk.StringVar()
+    tk.Entry(form_window, textvariable=street_var).pack()
+
+    tk.Label(form_window, text="Stadt:").pack()
+    city_var = tk.StringVar()
+    tk.Entry(form_window, textvariable=city_var).pack()
+
+    tk.Label(form_window, text="Postleitzahl:").pack()
+    zip_code_var = tk.StringVar()
+    tk.Entry(form_window, textvariable=zip_code_var).pack()
+
+    tk.Label(form_window, text="Land:").pack()
+    country_var = tk.StringVar()
+    tk.Entry(form_window, textvariable=country_var).pack()
+
+    tk.Label(form_window, text="Sterne (1-5):").pack()
+    stars_var = tk.StringVar()
+    tk.Entry(form_window, textvariable=stars_var).pack()
+
+    tk.Label(form_window, text="Zimmeranzahl:").pack()
+    number_of_rooms_var = tk.StringVar()
+    tk.Entry(form_window, textvariable=number_of_rooms_var).pack()
+
+    # Speichern-Button
+    tk.Button(form_window, text="Hotel speichern", command=save_hotel).pack()
+
+    # Logout-Button
+    logout_button = tk.Button(root, text="Logout", command=lambda: logout_and_return_to_login(root))
+    logout_button.pack(pady=10)
+
+    # Admin-Dashboard-Loop
+    root.mainloop()
+
+### Login-Fenster ###
+def login_window():
+
+    def attempt_login():
+        username = username_entry.get()
+        password = password_entry.get()
+
+        role = authenticate(username, password)
+        if role == "admin":
+            messagebox.showinfo("Erfolg", "Willkommen Admin!")
+            login.quit()
+            open_admin_dashboard()
+        elif role == "user":
+            messagebox.showinfo("Erfolg", "Willkommen Benutzer!")
+            login.quit()
+            open_user_dashboard()
+        else:
+            messagebox.showerror("Fehler", "Ungültiger Benutzername oder Passwort!")
+
+    login = tk.Tk()
+    login.title("Login")
+    login.geometry("300x200")
+
+    tk.Label(login, text="Benutzername:").pack(pady=5)
+    username_entry = tk.Entry(login)
+    username_entry.pack(pady=5)
+
+    tk.Label(login, text="Passwort:").pack(pady=5)
+    password_entry = tk.Entry(login, show="*")
+    password_entry.pack(pady=5)
+
+    tk.Button(login, text="Login", command=attempt_login).pack(pady=10)
+
+    login.mainloop()
+
+
+# Hauptaufruf
 if __name__ == "__main__":
-    start_gui()
+    login_window()
