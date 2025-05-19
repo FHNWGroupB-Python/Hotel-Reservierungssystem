@@ -6,6 +6,21 @@ from data_access.base_dal import BaseDAL
 class HotelDAL(BaseDAL):
     def __init__(self, db_path:str = None):
         super().__init__(db_path)
+        self.initialize_table()
+
+    def initialize_table(self):
+        sql = """
+        CREATE TABLE IF NOT EXISTS Hotel(
+        hotelid INTEGER PRIMARY KEY AUTOINCREMENT,
+        hotel_name TEXT NOT NULL,
+        street TEXT NOT NULL,
+        city TEXT NOT NULL,
+        zip_code INTEGER NOT NULL,
+        country TEXT NOT NULL,
+        stars INTEGER NOT NULL,
+        number_of_rooms INTEGER NOT NULL)
+        """
+        self.execute(sql)
 
     def create_hotel(self, hotel_name:str, street:str, city:str, zip_code:int, country:str, stars:int, number_of_rooms:int) -> model.Hotel:
         if not hotel_name or not isinstance(hotel_name, str):
@@ -35,8 +50,23 @@ class HotelDAL(BaseDAL):
             stars,
             number_of_rooms
         )
+        try:
+            hotel_id, _ = self.execute(sql, params)
+            return model.Hotel(hotel_id, hotel_name, street, city, zip_code, country, stars, number_of_rooms)
+        except Exception as e:
+            print(f"Error creating hotel: {e}")
+            raise
+
         last_row_id = self.execute_sql(sql, params)
-        return model.Hotel(last_row_id, hotel_name, street, city, zip_code, country, stars, number_of_rooms)
+        return model.Hotel(hotel_id=hotel_id,
+                           hotel_name=hotel_name,
+                           street=street,
+                           city=city,
+                           zip_code=zip_code,
+                           country=country,
+                           stars=stars,
+                           number_of_rooms=number_of_rooms
+                           )
 
     def update_hotel(self, hotel: model.Hotel) -> None:
         if hotel is None:

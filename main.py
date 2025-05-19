@@ -1,4 +1,8 @@
+import os
+
+os.environ["hotel_reservation_db"] = "/path/to/your/database.db"
 from ui import gui  # Import der GUI-Funktionalität aus gui.py
+
 
 
 def main():

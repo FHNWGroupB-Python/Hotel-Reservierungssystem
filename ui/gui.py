@@ -19,7 +19,7 @@ def authenticate(username: str, password: str):
 
 
 def logout_and_return_to_login(current_window):
-    current_window.quit()  # Schließt das aktuelle Fenster
+    current_window.destroy()  # Schließt das aktuelle Fenster
     login_window()  # Öffnet das Login-Fenster erneut
 
 
@@ -128,12 +128,14 @@ def create_hotel_form(root):
 
         try:
             # Validierung und Konvertierung der Eingaben
-            if not hotel_name or not city or not street or not country:
+            if not hotel_name or not street or not city or not country or not zip_code or not stars or not number_of_rooms:
                 raise ValueError("Alle Felder müssen ausgefüllt sein.")
-
-            zip_code = int(zip_code)
-            stars = int(stars)
-            number_of_rooms = int(number_of_rooms)
+            try:
+                zip_code = int(zip_code)
+                stars = int(stars)
+                number_of_rooms = int(number_of_rooms)
+            except ValueError:
+                raise ValueError("PLZ, Sterne und Zimmeranzahl müssen korrekt definiert sein")
 
             if stars < 1 or stars > 5:
                 raise ValueError("Die Sterne müssen zwischen 1 und 5 liegen.")
@@ -151,7 +153,7 @@ def create_hotel_form(root):
                 number_of_rooms=number_of_rooms,
             )
             messagebox.showinfo("Erfolg", f"Hotel '{new_hotel.hotel_name}' wurde erfolgreich erstellt!")
-            form_window.quit()
+            form_window.destroy()
         except ValueError as v_err:
             messagebox.showerror("Validierungsfehler", str(v_err))
         except Exception as e:
@@ -210,11 +212,11 @@ def login_window():
         role = authenticate(username, password)
         if role == "admin":
             messagebox.showinfo("Erfolg", "Willkommen Admin!")
-            login.quit()
+            login.destroy()
             open_admin_dashboard()
         elif role == "user":
             messagebox.showinfo("Erfolg", "Willkommen Benutzer!")
-            login.quit()
+            login.destroy()
             open_user_dashboard()
         else:
             messagebox.showerror("Fehler", "Ungültiger Benutzername oder Passwort!")

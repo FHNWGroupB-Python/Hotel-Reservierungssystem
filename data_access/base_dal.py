@@ -4,15 +4,16 @@ import sqlite3
 
 class BaseDAL:
     def __init__(self, db_connection:str = None):
-        if db_connection is None:
-            self.__db_connection_str = os.environ.get('DB_File')
-            if self.__db_connection_str is None:
-                raise Exception("DB_File environment variable not set")
-        else:
-            self.__db_connection_str = db_connection
+            if db_connection is None:
+                self.db_connection_str = os.environ.get("hotel_reservation_db")
+                if self.db_connection_str is None:
+                    raise Exception("Database connection string not found")
+            else:
+                self.db_connection_str = db_connection
+
 
     def _connect(self):
-        return sqlite3.connect(self.__db_connection_str, detect_types=sqlite3.PARSE_DECLTYPES)
+        return sqlite3.connect(self.db_connection_str, detect_types=sqlite3.PARSE_DECLTYPES)
 
     def fetchone(self, sql:str,  params:tuple = None):
         if params is None:

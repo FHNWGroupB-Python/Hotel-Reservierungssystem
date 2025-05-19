@@ -72,8 +72,11 @@ class InvoiceDAL(BaseDAL):
 
         if result:
             invoice_id, amount, status, invoice_date = result
-            return model.Invoice(invoice_id=invoice_id, amount=amount, status=status,
-                                 invoice_date=date.fromisoformat(invoice_date))
+            return model.Invoice(invoice_id=invoice_id,
+                                 amount=amount,
+                                 status=status,
+                                 invoice_date=date.fromisoformat(invoice_date)
+                                 )
         return None
 
 
