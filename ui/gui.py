@@ -112,8 +112,12 @@ def open_admin_dashboard():
 
     tk.Label(root, text="Admin Dashboard - Hotelverwaltung", font=("Arial", 18)).pack(pady=10)
 
-    # Button im Admin-Dashboard hinzufügen, um das Formular zu öffnen
+    # Button zum erstellen eines neues Hotels
     tk.Button(root, text="Neues Hotel erstellen", command=lambda: create_hotel_form(root)).pack(pady=5)
+
+    # Logout-Button
+    logout_button = tk.Button(root, text="Logout", command=lambda: logout_and_return_to_login(root))
+    logout_button.pack(pady=10)
 
 def create_hotel_form(root):
 
@@ -194,10 +198,6 @@ def create_hotel_form(root):
 
     # Speichern-Button
     tk.Button(form_window, text="Hotel speichern", command=save_hotel).pack()
-
-    # Logout-Button
-    logout_button = tk.Button(root, text="Logout", command=lambda: logout_and_return_to_login(root))
-    logout_button.pack(pady=10)
 
     # Admin-Dashboard-Loop
     root.mainloop()

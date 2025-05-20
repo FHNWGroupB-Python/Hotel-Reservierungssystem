@@ -16,16 +16,16 @@ class Hotel:
         self.__country = country
         self.__stars = stars
         self.__number_of_rooms = number_of_rooms
-        self.rooms = [
-            Room(
-                roomid = i,
-                room_number = i,
-                room_type = "",
-                price_per_night = 0.0,
-                hotel = self
-            )
-            for i in range(1, number_of_rooms + 1)
-        ] # Komposition (Das Zimmer gehört fest zu einem Hotel)
+        self.rooms = []
+#            Room(
+#                roomid = i,
+#                room_number = i,
+#                room_type = "",
+#                price_per_night = 0.0,
+#                hotel = self
+#            )
+#            for i in range(1, number_of_rooms + 1)
+         # Komposition (Das Zimmer gehört fest zu einem Hotel)
         self.bookings = [] # Komposition (Buchung gehört fest zu einem Hotel)
         self.facility = [] # Assoziation: (Dienste können unabhängig existieren)
 

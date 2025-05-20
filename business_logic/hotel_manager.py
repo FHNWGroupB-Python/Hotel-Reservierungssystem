@@ -24,6 +24,12 @@ class HotelManager:
             print(f"Fehler beim Erstellen des Hotels: {e}")
             raise
 
+    def update_hotel(self, hotel_id: model.Hotel) -> None:
+        self.__hotel_dal.update_hotel(hotel_id)
+
+    def delete_hotel(self, hotel_id: int) -> None:
+        self.__hotel_dal.delete_hotel(hotel_id)
+
     def search_hotels_by_city(self, city: str) -> list[model.Hotel]:
         try:
             if not city:

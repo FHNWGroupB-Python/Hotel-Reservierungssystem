@@ -5,6 +5,20 @@ from data_access.base_dal import BaseDAL
 class RoomDAL(BaseDAL):
     def __init__(self, db_path: str = None):
         super().__init__(db_path)
+        self.initialize_table()
+
+    def initialize_table(self):
+        sql = """
+        CREATE TABLE IF NOT EXISTS Room(
+        room_id INTEGER PRIMARY KEY AUTOINCREMENT,
+        hotel_id INTEGER NOT NULL,
+        room_type TEXT NOT NULL,
+        max_guests INTEGER NOT NULL,
+        description TEXT,
+        price_per_night REAL NOT NULL,
+        amenities TEXT)
+        """
+        self.execute(sql)
 
     def get_room_details_by_hotel(self, hotel_id: int) -> list[dict]:
         sql = """

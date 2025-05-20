@@ -57,7 +57,7 @@ class HotelDAL(BaseDAL):
             print(f"Error creating hotel: {e}")
             raise
 
-        last_row_id = self.execute_sql(sql, params)
+        self.execute(sql, params)
         return model.Hotel(hotel_id=hotel_id,
                            hotel_name=hotel_name,
                            street=street,
@@ -85,7 +85,7 @@ class HotelDAL(BaseDAL):
             hotel.number_of_rooms,
             hotel.hotelid
         ])
-        last_row_id, row_count = self.execute_sql(sql, params)
+        self.execute(sql, params)
 
     def delete_hotel(self, hotel_id: int) -> None:
         if not hotel_id:
@@ -102,7 +102,7 @@ class HotelDAL(BaseDAL):
             raise ValueError("City must be a non-empty string.")
 
         sql = """
-        SELECT hotelid, hotel_name, street, city, zip_code, country, stars, number_of_rooms FROM Hotel WHERE city = ?
+        SELECT * FROM Hotel WHERE city = ?
         """
         params = (city,)
         rows = self.fetchall(sql, (city,))

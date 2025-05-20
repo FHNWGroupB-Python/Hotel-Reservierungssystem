@@ -3,7 +3,7 @@ import data_access
 
 class RoomManager:
     def __init__(self):
-        self.__room_dal = data_access.RoomDAL()
+        self.__room_dal = data_access.RoomDAL(db_path = "hotel_reservation.db")
 
     def create_room(self, hotel: model.Hotel, room_number: int, room_type: str, price: float) -> model.Room:
         return self.__room_dal.create_room(hotel, room_number, room_type, price)
@@ -18,12 +18,6 @@ class RoomManager:
         return self.__room_dal.search_room_availability(hotel, check_in, check_out)
 
     def show_room_details(self, hotel_id: int) -> list[dict]:
-        """
-        Zeigt Details zu verschiedenen Zimmertypen eines Hotels an.
-
-        :param hotel_id: Die ID des Hotels, dessen Zimmerdetails angezeigt werden sollen.
-        :return: Eine Liste von Dictionaries, die die Details zu jedem Zimmertyp enthalten.
-        """
         # Zimmerdetails aus der Datenbank abrufen (Simulation hier, tatsächliche Implementierung z.B. über DAL)
         room_data = self.__hotel_dal.get_room_details_by_hotel(hotel_id)
 
@@ -47,15 +41,6 @@ class RoomManager:
         return room_details
 
     def calculate_dynamic_price(self, base_price: float, season_factor: float = 1.0, demand_factor: float = 1.0, discount: float = 0.0) -> float:
-        """
-        Berechnet den dynamischen Preis basierend auf verschiedenen Faktoren.
-
-        :param base_price: Grundpreis für eine Übernachtung.
-        :param season_factor: Faktor basierend auf der Saison (z.B. Hauptsaison = 1.5, Nebensaison = 0.8).
-        :param demand_factor: Faktor basierend auf der Nachfrage (z.B. hohe Nachfrage = 1.2).
-        :param discount: Rabatt auf den finalen Preis (als absolute Zahl, z. B. 10 für 10CHF Rabatt).
-        :return: Der berechnete dynamische Preis (float).
-        """
         # Eingangswerte prüfen
         if base_price < 0:
             raise ValueError("Base price cannot be negative.")
