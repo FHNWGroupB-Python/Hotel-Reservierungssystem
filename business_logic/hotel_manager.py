@@ -47,3 +47,13 @@ class HotelManager:
         except Exception as e:
             print(f"Fehler bei der Suche nach Hotels mit {stars} Sternen: {e}")
             raise
+
+    def search_hotels_by_name(self, name: str) -> list[model.Hotel]:
+        try:
+            if not name:
+                raise ValueError("Bitte geben Sie einen Hotelname ein.")
+            return self.__hotel_dal.search_hotels_by_name(name)
+        except Exception as e:
+            print(f"Fehler bei der Suche nach Hotels mit dem Namen '{name}': {e}")
+            raise
+

@@ -37,7 +37,7 @@ class RoomDAL(BaseDAL):
             })
         return room_details
 
-    def add_room(self, hotel_id: int, room_type: str, max_guests: int, description: str, price_per_night: float,
+    def create_room(self, hotel_id: int, room_type: str, max_guests: int, description: str, price_per_night: float,
                  amenities: list[str]) -> int:
 
         amenities_csv = ", ".join(amenities)

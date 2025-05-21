@@ -55,4 +55,4 @@ class RoomManager:
         dynamic_price -= discount
 
         # Sicherstellen, dass der endgültige Preis nicht negativ ist
-        return max(dynamic_price, 0)  # Rückgabe mindestens 0CHF
+        return max(dynamic_price, 0)

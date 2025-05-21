@@ -155,3 +155,30 @@ class HotelDAL(BaseDAL):
             ))
         return hotels
 
+    def search_hotels_by_name(self, name: str) -> list[model.Hotel]:
+        if not name or not isinstance(name, str):
+            raise ValueError("Hotel name must be a non-empty string.")
+
+        sql = """
+        SELECT hotel_name FROM Hotel WHERE hotel_name LIKE ?
+        """
+        params = (name, )
+        rows = self.fetchall(sql, (name,))
+
+        if not rows:
+            return[]
+
+        # Ergebnisse in Hotel-Objekte umwandeln
+        hotels = []
+        for row in rows:
+            hotels.append(model.Hotel(
+                hotelid=row[0],
+                hotel_name=row[1],
+                street=row[2],
+                city=row[3],
+                zip_code=row[4],
+                country=row[5],
+                stars=row[6],
+                number_of_rooms=row[7]
+            ))
+        return hotels

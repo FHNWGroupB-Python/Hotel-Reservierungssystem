@@ -27,7 +27,7 @@ def logout_and_return_to_login(current_window):
 def open_user_dashboard():
     root = tk.Tk()
     root.title("Hotelreservierungssystem - Benutzer")
-    root.geometry("600x400")
+    root.geometry("800x600")
 
     # Begrüßungstext
     label = tk.Label(root, text="Wilkommen im Hotelreservierungssystem der Gruppe B2!", font=("Arial", 18))
@@ -43,13 +43,18 @@ def open_user_dashboard():
     city_entry = tk.Entry(search_frame, width=20)
     city_entry.grid(row=0, column=1, padx=5, pady=5)
 
+    # Hotelnamefeld
+    hotel_name_label = tk.Label(search_frame, text="Hotelname:", font=("Arial", 12))
+    hotel_name_label.grid(row=0, column=4, padx=5, pady=5, sticky="w")
+    hotel_name_entry = tk.Entry(search_frame, width=20)
+    hotel_name_entry.grid(row=0, column=5, padx=5, pady=5)
+
     # Sterneauswahl
     stars_label = tk.Label(search_frame, text="Sterne (1-5):", font=("Arial", 12))
     stars_label.grid(row=0, column=2, padx=5, pady=5, sticky="w")
     selected_stars = tk.StringVar(value="Alle")
     stars_options = ["Alle", "1", "2", "3", "4", "5"]
-    stars_dropdown = ttk.Combobox(search_frame, textvariable=selected_stars, values=stars_options, state="readonly",
-                                  width=10)
+    stars_dropdown = ttk.Combobox(search_frame, textvariable=selected_stars, values=stars_options, state="readonly", width=10)
     stars_dropdown.grid(row=0, column=3, padx=5, pady=5)
 
     # Suchergebnisse
@@ -59,7 +64,7 @@ def open_user_dashboard():
     results_label = tk.Label(results_frame, text="Suchergebnisse:", font=("Arial", 14))
     results_label.pack(anchor="w")
 
-    columns = ("Name", "Stadt", "Sterne", "Adresse")
+    columns = ("Name", "Stadt", "Sterne", "Adresse", "Postleitzahl", "Land", "Zimmeranzahl")
     tree = ttk.Treeview(results_frame, columns=columns, show="headings", height=10)
     for col in columns:
         tree.heading(col, text=col)
@@ -68,13 +73,16 @@ def open_user_dashboard():
 
     # Hotelsuche
     def search_hotels():
-        # Stadt und Sterne aus den Suchfeldern abrufen
+        # Stadt, Hotelname und Sterne aus den Suchfeldern abrufen
         city = city_entry.get()
+        hotel_name = hotel_name_entry.get()
         stars = selected_stars.get()
 
         try:
             if city:
                 results = hotel_manager.search_hotels_by_city(city)
+            elif hotel_name:
+                results = hotel_manager.search_hotels_by_name(hotel_name)
             elif stars and stars != "Alle":
                 results = hotel_manager.search_hotels_by_stars(int(stars))
             else:
@@ -87,8 +95,12 @@ def open_user_dashboard():
                     hotel.hotel_name,
                     hotel.city,
                     hotel.stars,
-                    f"{hotel.street}, {hotel.zip_code}, {hotel.country}"
+                    hotel.street,
+                    hotel.zip_code,
+                    hotel.country,
+                    hotel.rooms
                 ))
+                return f"{hotel.hotel_name}, {hotel.city}, {hotel.stars}, {hotel.street}, {hotel.zip_code}, {hotel.country}, {hotel.rooms}"
 
         except Exception as e:
             messagebox.showerror("Fehler", f"Fehler bei der Suche: {e}")
@@ -108,16 +120,67 @@ def open_user_dashboard():
 def open_admin_dashboard():
     root = tk.Tk()
     root.title("Admin Dashboard - Hotelverwaltung")
-    root.geometry("600x400")
+    root.geometry("800x600")
 
     tk.Label(root, text="Admin Dashboard - Hotelverwaltung", font=("Arial", 18)).pack(pady=10)
 
     # Button zum erstellen eines neues Hotels
     tk.Button(root, text="Neues Hotel erstellen", command=lambda: create_hotel_form(root)).pack(pady=5)
 
+    # Button zum Bearbeiten eines Hotels
+    tk.Button(root, text="Hotel bearbeiten", command=lambda: update_hotel_form(root)).pack(pady=5)
+
     # Logout-Button
     logout_button = tk.Button(root, text="Logout", command=lambda: logout_and_return_to_login(root))
     logout_button.pack(pady=10)
+
+
+def search_hotels_by_city(root):
+    def perform_search():
+        try:
+            search_text = search_var.get().strip()
+            if not search_text:
+                raise ValueError("Bitte geben Sie einen Suchbegriff (Name oder Teil des Namens) ein!")
+
+            # Ruft die Suchergebnisse aus dem Hotel Manager ab
+            hotels = hotel_manager.search_hotels_by_city(search_text)
+
+            # Ergebnisse in der Listbox aktualisieren
+            result_listbox.delete(0, tk.END)  # Löscht die vorherigen Einträge
+            if not hotels:
+                result_listbox.insert(tk.END, "Keine Ergebnisse gefunden.")
+                return
+
+            # Ergebnisse mit Hotel-ID anzeigen
+            for hotel in hotels:
+                result_listbox.insert(
+                    tk.END,
+                    f"ID: {hotel.hotelid}, Name: {hotel.hotel_name}, Stadt: {hotel.city}, Sterne: {hotel.stars}"
+                )
+
+        except ValueError as v_err:
+            messagebox.showerror("Eingabefehler", str(v_err))
+        except Exception as e:
+            messagebox.showerror("Fehler", f"Ein unerwarteter Fehler ist aufgetreten: {e}")
+
+    # Fenster für die Hotelsuche öffnen
+    search_window = tk.Toplevel(root)
+    search_window.title("Hotelsuche (Admin)")
+
+    # Eingabefeld für Suchtext erstellen
+    tk.Label(search_window, text="Suchen Sie nach Hotelname:").pack(pady=5)
+    search_var = tk.StringVar()
+    tk.Entry(search_window, textvariable=search_var, width=50).pack(pady=5)
+
+    # Such-Button hinzufügen
+    tk.Button(search_window, text="Suchen", command=perform_search).pack(pady=5)
+
+    # Listbox für die Darstellung der Ergebnisse
+    result_listbox = tk.Listbox(search_window, width=80, height=20)
+    result_listbox.pack(pady=10)
+
+    # Button zum Schließen des Fensters
+    tk.Button(search_window, text="Schließen", command=search_window.destroy).pack(pady=5)
 
 def create_hotel_form(root):
 
@@ -198,6 +261,9 @@ def create_hotel_form(root):
 
     # Speichern-Button
     tk.Button(form_window, text="Hotel speichern", command=save_hotel).pack()
+
+def update_hotel_form(root):
+    pass
 
     # Admin-Dashboard-Loop
     root.mainloop()
