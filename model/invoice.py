@@ -1,30 +1,21 @@
 from __future__ import annotations
-from typing import TYPE_CHECKING
-if TYPE_CHECKING:
-
-    from model.booking import Booking
 
 class Invoice:
-    def __init__(self, invoiceid:int, amount:str, status:str, invoice_date:str, booking: "Booking" = None):
+    def __init__(self, invoiceid:int, issue_date: str, total_amount: float, booking = None):
         self.__invoiceid = invoiceid
-        self.__amount = amount
-        self.__status = status
-        self.__invoice_date = invoice_date
-        self.booking = booking # Referenz auf Booking 1-zu-1 Komposition
+        self.__issue_date = issue_date
+        self.__total_amount = total_amount
+        self.booking = booking
 
     @property
     def invoiceid(self):
         return self.__invoiceid
 
     @property
-    def amount(self):
-        return self.__amount
+    def issue_date(self):
+        return self.__issue_date
 
     @property
-    def status(self):
-        return self.__status
-
-    @property
-    def invoice_date(self):
-        return self.__invoice_date
+    def total_amount(self):
+        return self.__total_amount
 

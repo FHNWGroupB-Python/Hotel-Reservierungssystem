@@ -5,8 +5,6 @@ if TYPE_CHECKING:
     from model.hotel import Hotel
     from model.invoice import Invoice
     from model.guest import Customer
-    from model.payment_method import PaymentMethod
-
 
 class Booking:
     def __init__ (self, bookingid: int, number_of_guest:int, check_in: str, check_out: str, status: str, hotel: "Hotel"):
@@ -15,19 +13,15 @@ class Booking:
         self.__check_in = check_in
         self.__check_out = check_out
         self.__status = status
-        self.hotel = hotel # Referenz auf Hotel
-        self.invoice = None # Komposition (Rechnung ist fixer Bestandteil einer Buchung)
-        self.customer = None # Assoziation (Customer)
-        self.payment = None # Assoziation (Rechnungsmethode)
+        self.hotel = hotel
+        self.invoice = None
+        self.customer = None
 
     def add_invoice(self, invoice: "Invoice"):
         self.invoice = invoice
 
     def add_customer(self, customer: "Customer"):
         self.customer = customer
-
-    def add_payment(self, payment: "PaymentMethod"):
-        self.payment = payment
 
     @property
     def bookingid(self):
