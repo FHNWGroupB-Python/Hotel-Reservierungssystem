@@ -4,7 +4,7 @@ if TYPE_CHECKING:
 
     from model.hotel import Hotel
     from model.invoice import Invoice
-    from model.customer import Customer
+    from model.guest import Customer
     from model.payment_method import PaymentMethod
 
 

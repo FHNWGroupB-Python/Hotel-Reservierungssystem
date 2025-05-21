@@ -2,23 +2,24 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
 
-    from model.additional_service import AdditionalService
     from model.hotel import Hotel
 
 class Room:
-    def __init__(self, roomid:int, room_number:int, room_type:str, price_per_night:float, hotel:"Hotel"):
+    def __init__(self, roomid:int, room_number:int, price_per_night:float):
         self.__roomid = roomid
         self.__room_number = room_number
-        self.__room_type = room_type
-        self.__price_per_night = price_per_night # privates Attribut
-        self.hotel = hotel
-        self.additional_services = []  # Assoziation (Service kann unabhängig existieren)
+        self.__price_per_night = price_per_night
+        self.hotel = None
 
-    def add_hotel(self, hotel: "Hotel"):
-        self.hotel = hotel
+    @property
+    def hotel(self) -> "Hotel":
+        return self.__hotel
 
-    def add_additional_service(self, additional_service: "AdditionalService"):
-        self.additional_services.append(additional_service)
+    @hotel.setter
+    def hotel(self, hotel: "Hotel"):
+        if self.hotel is not None and self.hotel != hotel:
+            raise ValueError("Room is already assigned in another Hotel")
+        self.__hotel = hotel
 
     @property
     def roomid(self):
@@ -30,15 +31,11 @@ class Room:
 
     @room_number.setter
     def room_number(self, room_number):
+        if not isinstance(room_number, int):
+            raise ValueError("room_number must be an integer")
+        if not room_number > 0:
+            raise ValueError("room_number must be greater than 0")
         self.__room_number = room_number
-
-    @property
-    def room_type(self):
-        return self.__room_type
-
-    @room_type.setter
-    def room_type(self, room_type):
-        self.__room_type = room_type
 
     @property
     def price_per_night(self):
@@ -46,5 +43,9 @@ class Room:
 
     @price_per_night.setter
     def price_per_night(self, price_per_night):
+        if not isinstance(price_per_night, float):
+            raise ValueError("price_per_night must be a float")
+        if not price_per_night > 0:
+            raise ValueError("price_per_night must be greater than 0")
         self.__price_per_night = price_per_night
 

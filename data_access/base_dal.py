@@ -5,7 +5,7 @@ import sqlite3
 class BaseDAL:
     def __init__(self, db_connection:str = None):
             if db_connection is None:
-                self.db_connection_str = os.environ.get("hotel_reservation_db")
+                self.db_connection_str = os.environ.get("DB")
                 if self.db_connection_str is None:
                     raise Exception("Database connection string not found")
             else:

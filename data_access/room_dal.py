@@ -20,70 +20,30 @@ class RoomDAL(BaseDAL):
         """
         self.execute(sql)
 
-    def get_room_details_by_hotel(self, hotel_id: int) -> list[dict]:
+    def create_room(self, room_id: int, room_number: int, price_per_night: float):
         sql = """
-        SELECT room_type, max_guests, description, price_per_night, amenities FROM Room WHERE hotel_id = ?
+        INSERT INTO Room (room_id, hotel_id, room_number, price_per_night) VALUES (?,?,?,?)
         """
-        rows = self.fetchall(sql, (hotel_id,))
+        params = (
+            room_id,
+            room_number,
+            price_per_night,
+        )
+        self.execute(sql, params)
 
-        room_details = []
-        for row in rows:
-            room_details.append({
-                "room_type": row[0],
-                "max_guests": row[1],
-                "description": row[2],
-                "price_per_night": row[3],
-                "amenities": row[4].split(", ") if row[4] else []
-            })
-        return room_details
-
-    def create_room(self, hotel_id: int, room_type: str, max_guests: int, description: str, price_per_night: float,
-                 amenities: list[str]) -> int:
-
-        amenities_csv = ", ".join(amenities)
+    def update_room(self, room_id: int, room_number: int, price_per_night: float):
         sql = """
-        INSERT INTO Room (hotel_id, room_type, max_guests, description, price_per_night, amenities) VALUES (?, ?, ?, ?, ?, ?)
+        UPDATE Room SET room_number = ?, price_per_night = ? WHERE room_id = ?
         """
-        room_id, _ = self.execute(sql, (hotel_id, room_type, max_guests, description, price_per_night, amenities_csv))
-        return room_id
+        params = tuple([
+            room_number,
+            price_per_night,
+        ])
+        self.execute(sql, params)
 
-    def delete_room(self, room_id: int) -> None:
+    def delete_room(self, room_id: int):
         sql = """
         DELETE FROM Room WHERE room_id = ?
         """
-        self.execute(sql, (room_id,))
-
-    def update_room(self, room_id: int, room_type: str = None, max_guests: int = None, description: str = None, price_per_night: float = None, amenities: list[str] = None) -> None:
-
-        updates = []
-        params = []
-
-        if room_type:
-            updates.append("room_type = ?")
-            params.append(room_type)
-
-        if max_guests:
-            updates.append("max_guests = ?")
-            params.append(max_guests)
-
-        if description:
-            updates.append("description = ?")
-            params.append(description)
-
-        if price_per_night:
-            updates.append("price_per_night = ?")
-            params.append(price_per_night)
-
-        if amenities:
-            amenities_csv = ", ".join(amenities)
-            updates.append("amenities = ?")
-            params.append(amenities_csv)
-
-        # Es gibt nichts zu aktualisieren, wenn dies leer ist
-        if not updates:
-            raise ValueError("Es wurden keine Werte für das Update bereitgestellt.")
-
-        params.append(room_id)
-
-        sql = f"UPDATE Room SET {', '.join(updates)} WHERE room_id = ?"
-        self.execute(sql, tuple(params))
+        params = tuple([room_id])
+        self.execute(sql, params)
