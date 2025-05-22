@@ -3,6 +3,7 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
 
     from model.hotel import Hotel
+    from model.room_type import RoomType
 
 class Room:
     def __init__(self, roomid:int, room_number:int, price_per_night:float):
@@ -11,6 +12,7 @@ class Room:
         self.__price_per_night = price_per_night
         self.hotel = None
         self.bookings = []
+        self.room_type = None
 
     def add_booking(self, booking):
         self.bookings.append(booking)
@@ -25,6 +27,17 @@ class Room:
         if self.hotel is not None and self.hotel != hotel:
             raise ValueError("Room is already assigned in another Hotel")
         self.__hotel = hotel
+
+    @property
+    def room_type(self) -> "RoomType":
+        return self.__room_type
+
+    @room_type.setter
+    def room_type(self, room_type: "RoomType"):
+        if not isinstance(room_type, RoomType):
+            raise ValueError("Room Type must be an instance of RoomType")
+        self.__room_type = room_type
+        room_type.add_room(self)
 
     @property
     def roomid(self):

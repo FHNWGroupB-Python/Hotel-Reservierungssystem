@@ -1,11 +1,24 @@
 from __future__ import annotations
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
 
+    from model.room import Room
 
 class RoomType:
     def __init__(self, room_type_id: int, description: str, max_guests: int):
         self.__room_type_id = room_type_id
         self.__description = description
         self.__max_guests = max_guests
+        self._rooms = []
+
+
+    def add_room(self, room: "Room"):
+        if room not in self._rooms:
+            self._rooms.append(room)
+
+    @property
+    def rooms(self):
+        return self._rooms
 
     @property
     def room_type_id(self):
