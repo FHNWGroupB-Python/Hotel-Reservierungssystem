@@ -6,7 +6,7 @@ if TYPE_CHECKING:
 
 
 class Address:
-    def __init__(self, address_id:int, street:str, city:str, zip_code:int):
+    def __init__(self, address_id: int, street: str, city: str, zip_code: int):
         self.__address_id = address_id
         self.__street = street
         self.__city = city

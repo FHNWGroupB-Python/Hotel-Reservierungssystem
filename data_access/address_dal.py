@@ -19,7 +19,7 @@ class AddressDAL(BaseDAL):
         """
         self.execute(sql)
 
-    def create_address(self) -> model.Address:
+    def create_address(self, street: str, city: str, zip_code: int) -> model.Address:
         sql = """
         INSERT INTO Address (street, city, zip_code) VALUES (?,?,?))
         """

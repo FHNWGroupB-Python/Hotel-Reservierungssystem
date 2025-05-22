@@ -4,3 +4,4 @@ from .guest_manager import GuestManager
 from .facility_manager import FacilityManager
 from .invoice_manager import InvoiceManager
 from .hotel_manager import HotelManager
+from .address_manager import AddressManager
