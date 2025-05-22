@@ -8,4 +8,10 @@ class AddressManager:
     def create_address(self, address: model.Address) -> model.Address:
         return self.__address_dal.create_address(address)
 
+    def update_address(self, address: model.Address) -> model.Address:
+        return self.__address_dal.update_address(address)
+
+    def delete_address(self, address: model.Address) -> model.Address:
+        return self.__address_dal.delete_address(address)
+
 

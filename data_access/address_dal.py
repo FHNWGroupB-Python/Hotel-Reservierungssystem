@@ -29,3 +29,22 @@ class AddressDAL(BaseDAL):
             zip_code
         )
         self.execute(sql, params)
+
+    def update_address(self, address: model.Address):
+        sql = """
+        UPDATE Address SET street = ?, city = ?, zip_code = ? WHERE address_id = ?
+        """
+        params = tuple([
+            address.street,
+            address.city,
+            address.zip_code,
+            address.address_id
+        ])
+        self.execute(sql, params)
+
+    def delete_address(self, address_id: int):
+        sql = """
+        DELETE FROM Address WHERE address_id = ?
+        """
+        params = tuple([address_id])
+        self.execute(sql, params)

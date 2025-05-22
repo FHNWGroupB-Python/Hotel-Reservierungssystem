@@ -5,3 +5,4 @@ from .facility_manager import FacilityManager
 from .invoice_manager import InvoiceManager
 from .hotel_manager import HotelManager
 from .address_manager import AddressManager
+from .room_type_manager import RoomTypeManager

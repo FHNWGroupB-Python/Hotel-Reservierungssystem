@@ -9,6 +9,7 @@ from .hotel_dal import HotelDAL
 from .invoice_dal import InvoiceDAL
 from .room_dal import RoomDAL
 from .address_dal import AddressDAL
+from .room_type_dal import RoomTypeDAL
 
 
 # Adapter: Wandelt `date`-Objekt in `TEXT` um
