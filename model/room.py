@@ -10,6 +10,11 @@ class Room:
         self.__room_number = room_number
         self.__price_per_night = price_per_night
         self.hotel = None
+        self.bookings = []
+
+    def add_booking(self, booking):
+        self.bookings.append(booking)
+        booking.room = self
 
     @property
     def hotel(self) -> "Hotel":

@@ -10,7 +10,7 @@ class Guest:
         self.__first_name = first_name
         self.__last_name = last_name
         self.__email = email
-        self.bookings = [] # Assoziation (Kunde in Verbindung 1-zu-n zu Buchung)
+        self.bookings = []
         self.address = None
 
     def add_booking(self, booking: "Booking"):

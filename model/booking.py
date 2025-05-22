@@ -2,55 +2,51 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
 
-    from model.hotel import Hotel
     from model.invoice import Invoice
-    from model.guest import Customer
+    from model.guest import Guest
+    from model.room import Room
 
 class Booking:
-    def __init__ (self, bookingid: int, number_of_guest:int, check_in: str, check_out: str, status: str, hotel: "Hotel"):
-        self.__bookingid = bookingid
-        self.__number_of_guest = number_of_guest
-        self.__check_in = check_in
-        self.__check_out = check_out
-        self.__status = status
-        self.hotel = hotel
+    def __init__ (self, booking_id: int, check_in_date: str, check_out_date: str, is_cancelled: bool, total_amount: float):
+        self.__booking_id = booking_id
+        self.__check_in_date = check_in_date
+        self.__check_out_date = check_out_date
+        self.__is_cancelled = is_cancelled
+        self.__total_amount = total_amount
         self.invoice = None
-        self.customer = None
+        self.guest = None
+        self.room = None
+
 
     def add_invoice(self, invoice: "Invoice"):
         self.invoice = invoice
 
-    def add_customer(self, customer: "Customer"):
-        self.customer = customer
+    def add_guest(self, guest: "Guest"):
+        self.guest = guest
+
+    def add_room(self, room: "Room"):
+        self.room = room
 
     @property
     def bookingid(self):
-        return self.__bookingid
+        return self.__booking_id
 
     @property
-    def number_of_guest(self):
-        return self.__number_of_guest
+    def check_in_date(self):
+        return self.__check_in_date
 
-    @number_of_guest.setter
-    def number_of_guest(self, number_of_guest):
-        self.__number_of_guest = number_of_guest
-
-    @property
-    def check_in(self):
-        return self.__check_in
-
-    @check_in.setter
-    def check_in(self, check_in):
-        self.__check_in = check_in
+    @check_in_date.setter
+    def check_in_date(self, check_in_date):
+        self.__check_in_date = check_in_date
 
     @property
-    def check_out(self):
-        return self.__check_out
+    def check_out_date(self):
+        return self.__check_out_date
 
-    @check_out.setter
-    def check_out(self, check_out):
-        self.__check_out = check_out
+    @check_out_date.setter
+    def check_out_date(self, check_out_date):
+        self.__check_out_date = check_out_date
 
     @property
-    def status(self):
-        return self.__status
+    def total_amount(self):
+        return self.__total_amount
