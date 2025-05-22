@@ -1,11 +1,11 @@
 from __future__ import annotations
 
 class Invoice:
-    def __init__(self, invoiceid:int, issue_date: str, total_amount: float, booking = None):
+    def __init__(self, invoiceid:int, issue_date: str, total_amount: float):
         self.__invoiceid = invoiceid
         self.__issue_date = issue_date
         self.__total_amount = total_amount
-        self.booking = booking
+        self.booking = None
 
     @property
     def invoiceid(self):

@@ -1,4 +1,9 @@
 from __future__ import annotations
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from model.guest import Guest
+    from model.hotel import Hotel
+
 
 class Address:
     def __init__(self, address_id:int, street:str, city:str, zip_code:int):
@@ -6,7 +11,7 @@ class Address:
         self.__street = street
         self.__city = city
         self.__zip_code = zip_code
-        self.__customer = None
+        self.__guest = None
         self.__hotel = None
 
     @property

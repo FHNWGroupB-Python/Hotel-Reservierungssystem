@@ -6,8 +6,8 @@ class BookingManager:
     def __init__(self):
         self.__booking_dal = data_access.BookingDAL()
 
-    def create_booking(self, customer: model.Customer, hotel: model.Hotel, number_of_guests: int, check_in: str, check_out: str) -> model.Booking:
-        return self.__booking_dal.create_booking(customer, hotel, number_of_guests, check_in, check_out)
+    def create_booking(self, guest: model.Guest, hotel: model.Hotel, number_of_guests: int, check_in: str, check_out: str) -> model.Booking:
+        return self.__booking_dal.create_booking(guest, hotel, number_of_guests, check_in, check_out)
 
     def update_booking(self, booking: model.Booking) -> None:
         self.__booking_dal.update_booking(booking)

@@ -1,8 +1,6 @@
 from __future__ import annotations
 import model
 from data_access.base_dal import BaseDAL
-from datetime import date
-
 
 class InvoiceDAL(BaseDAL):
     def __init__(self, db_path:str = None):
