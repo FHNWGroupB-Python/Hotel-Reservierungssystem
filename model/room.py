@@ -1,7 +1,6 @@
 from __future__ import annotations
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
-
     from model.hotel import Hotel
     from model.room_type import RoomType
 
@@ -10,7 +9,7 @@ class Room:
         self.__roomid = roomid
         self.__room_number = room_number
         self.__price_per_night = price_per_night
-        self.hotel = None
+        self.__hotel = None
         self.bookings = []
         self.room_type = None
 
@@ -20,13 +19,7 @@ class Room:
 
     @property
     def hotel(self) -> "Hotel":
-        return self.__hotel
-
-    @hotel.setter
-    def hotel(self, hotel: "Hotel"):
-        if self.hotel is not None and self.hotel != hotel:
-            raise ValueError("Room is already assigned in another Hotel")
-        self.__hotel = hotel
+        return self.__hotel # Referenz auf das Hotel und nur Lesezugriff
 
     @property
     def room_type(self) -> "RoomType":

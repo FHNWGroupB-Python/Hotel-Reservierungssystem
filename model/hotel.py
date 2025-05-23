@@ -10,7 +10,7 @@ class Hotel:
         self.__hotelid = hotelid
         self.__hotel_name = hotel_name
         self.__stars = stars
-        self.__rooms = []
+        self.__rooms = []                  # Liste der Räume von Hotel
         self.address = None
 
     def add_room(self, room: "Room"):
@@ -18,8 +18,12 @@ class Hotel:
             raise ValueError("Room already exists")
         if room.hotel is not None and room.hotel != self:
             raise ValueError("Room already assigned to another hotel")
-        room.hotel = self
         self.__rooms.append(room)
+        room._Room__hotel = self
+
+    @property
+    def rooms(self) -> list["Room"]:
+        return self.__rooms
 
     @property
     def hotelid(self):
