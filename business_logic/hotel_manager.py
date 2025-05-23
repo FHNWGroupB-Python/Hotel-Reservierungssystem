@@ -4,7 +4,7 @@ import data_access
 
 class HotelManager:
     def __init__(self) -> None:
-        self.__hotel_dal = data_access.HotelDAL(db_path = "database/")
+        self.__hotel_dal = data_access.HotelDAL(db_path = "database/hotel_reservation_sample.db")
 
     def create_hotel(self, hotel_name: str, stars: int) -> None:
         self.__hotel_dal.create_hotel(hotel_name, stars)
