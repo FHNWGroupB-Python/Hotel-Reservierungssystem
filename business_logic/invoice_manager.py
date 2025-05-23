@@ -7,3 +7,4 @@ class InvoiceManager:
 
     def create_invoice(self, issue_date: str, total_amount: float) -> model.Invoice:
         self.__invoice_dal.create_invoice(issue_date, total_amount)
+
