@@ -62,3 +62,12 @@ class HotelDAL(BaseDAL):
         """
         params = (name, )
         self.fetchall(sql, (name,))
+
+    def search_hotels_by_address(self, address: str) -> None:
+        sql = """
+        SELECT * FROM Hotel LEFT JOIN Address ON Hotel.address_id = Address.address_id WHERE city LIKE ?
+        """
+        params = (
+            address
+        )
+        self.fetchall(sql, (address,))

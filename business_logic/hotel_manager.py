@@ -21,3 +21,5 @@ class HotelManager:
     def search_hotels_by_name(self, name: str) -> None:
         self.__hotel_dal.search_hotels_by_name(name)
 
+    def search_hotels_by_address(self, address: str) -> None:
+        self.__hotel_dal.search_hotels_by_address(address)
