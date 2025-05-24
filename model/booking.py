@@ -50,3 +50,11 @@ class Booking:
     @property
     def total_amount(self):
         return self.__total_amount
+
+    @property
+    def is_cancelled(self):
+        return self.__is_cancelled
+
+    @is_cancelled.setter
+    def is_cancelled(self, value: bool):
+        self.__is_cancelled = value
