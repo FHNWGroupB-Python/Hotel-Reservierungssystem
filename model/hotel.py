@@ -6,9 +6,9 @@ if TYPE_CHECKING:
     from model.address import Address
 
 class Hotel:
-    def __init__(self, hotelid:int, hotel_name:str, stars:int):
-        self.__hotelid = hotelid
-        self.__hotel_name = hotel_name
+    def __init__(self, hotel_id:int, name:str, stars:int):
+        self.__hotel_id = hotel_id
+        self.__name = name
         self.__stars = stars
         self.__rooms = []                  # Liste der Räume von Hotel
         self.address = None
@@ -26,20 +26,20 @@ class Hotel:
         return self.__rooms
 
     @property
-    def hotelid(self):
-        return self.__hotelid
+    def hotel_id(self):
+        return self.__hotel_id
 
     @property
-    def hotel_name(self):
-        return self.__hotel_name
+    def name(self):
+        return self.__name
 
-    @hotel_name.setter
-    def hotel_name(self, name:str) -> None:
+    @name.setter
+    def name(self, name:str) -> None:
         if not name:
             raise ValueError("hotel_name is required")
         if not isinstance(name, str):
             raise ValueError("hotel_name must be a string")
-        self.__hotel_name = name
+        self.__name = name
 
     @property
     def stars(self):

@@ -1,50 +1,44 @@
 from __future__ import annotations
 
 import model
+from model.address import Address
+
 from data_access.base_dal import BaseDAL
 
 class HotelDAL(BaseDAL):
     def __init__(self, db_path:str = None):
         super().__init__(db_path)
-        self.initialize_table()
 
-    def initialize_table(self):
+    def create_hotel(self,
+                     name:str,
+                     stars:int,
+                     address: model.Address
+                     ) -> model.Hotel:
         sql = """
-        CREATE TABLE IF NOT EXISTS Hotel(
-        hotelid INTEGER PRIMARY KEY AUTOINCREMENT,
-        hotel_name TEXT NOT NULL,
-        street TEXT NOT NULL,
-        city TEXT NOT NULL,
-        zip_code INTEGER NOT NULL,
-        country TEXT NOT NULL,
-        stars INTEGER NOT NULL,
-        number_of_rooms INTEGER NOT NULL)
-        """
-        self.execute(sql)
-
-    def create_hotel(self, hotel_name:str, stars:int) -> model.Hotel:
-        sql = """
-        INSERT INTO Hotel (hotel_name, stars) VALUES (?,?)
+        INSERT INTO Hotel (name, stars, address_id) 
+        VALUES (?, ?, ?)
         """
         params = (
-            hotel_name,
+            name,
             stars,
+            address.address_id
         )
-        self.execute(sql, params)
+        lastrowid, _ = self.execute(sql, params)
+        return model.Hotel(lastrowid, name, stars)
 
     def update_hotel(self, hotel: model.Hotel) -> None:
         sql = """
-        UPDATE Hotel SET hotel_name = ?, stars = ? WHERE hotelid = ?
+        UPDATE Hotel SET name = ?, stars = ? WHERE hotel_id = ?
         """
         params = tuple([
-            hotel.hotel_name,
+            hotel.name,
             hotel.stars,
         ])
         self.execute(sql, params)
 
     def delete_hotel(self, hotel_id: int) -> None:
         sql = """
-        DELETE FROM Hotel WHERE hotelid = ?
+        DELETE FROM Hotel WHERE hotel_id = ?
         """
         params = tuple([hotel_id])
         self.execute(sql, params)
@@ -58,7 +52,7 @@ class HotelDAL(BaseDAL):
 
     def search_hotels_by_name(self, name: str) -> list[model.Hotel]:
         sql = """
-        SELECT hotel_name FROM Hotel WHERE hotel_name LIKE ?
+        SELECT name FROM Hotel WHERE name LIKE ?
         """
         params = (name, )
         self.fetchall(sql, (name,))

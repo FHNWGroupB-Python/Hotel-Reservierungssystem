@@ -1,13 +1,15 @@
 import model
 import data_access
 
+from model.address import Address
+
 
 class HotelManager:
     def __init__(self) -> None:
-        self.__hotel_dal = data_access.HotelDAL(db_path = "database/hotel_reservation_sample.db")
+        self.__hotel_dal = data_access.HotelDAL()
 
-    def create_hotel(self, hotel_name: str, stars: int) -> None:
-        self.__hotel_dal.create_hotel(hotel_name, stars)
+    def create_hotel(self, name: str, stars: int, address) -> model.Hotel:
+        self.__hotel_dal.create_hotel(name, stars, address)
 
     def update_hotel(self, hotel_id: model.Hotel) -> None:
         self.__hotel_dal.update_hotel(hotel_id)
