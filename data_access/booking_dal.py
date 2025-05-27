@@ -26,7 +26,7 @@ class BookingDAL(BaseDAL):
         """
         params = (
             guest.guestid,
-            room.roomid,
+            room.room_id,
             check_in_date,
             check_out_date,
             int(False),  # SQLite kennt kein BOOLEAN

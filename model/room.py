@@ -1,25 +1,24 @@
 from __future__ import annotations
 from typing import TYPE_CHECKING
+
+import model
+
 if TYPE_CHECKING:
     from model.hotel import Hotel
     from model.room_type import RoomType
 
 class Room:
-    def __init__(self, roomid:int, room_number:int, price_per_night:float):
-        self.__roomid = roomid
+    def __init__(self, room_id:int, room_number:int, price_per_night:float):
+        self.__room_id = room_id
         self.__room_number = room_number
         self.__price_per_night = price_per_night
         self.__hotel = None
-        self.__bookings = [] #TODO Prüfen eventuel auf Gast verbinden
-        self.room_type = None
+        self.__room_type = None
 
-    def add_booking(self, booking):
-        self.__bookings.append(booking)
-        booking.room = self
 
     @property
     def hotel(self) -> "Hotel":
-        return self.__hotel # Referenz auf das Hotel und nur Lesezugriff
+        return self.__hotel
 
     @property
     def room_type(self) -> "RoomType":
@@ -33,8 +32,8 @@ class Room:
         self.__room_type = room_type
 
     @property
-    def roomid(self):
-        return self.__roomid
+    def room_id(self):
+        return self.__room_id
 
     @property
     def room_number(self):

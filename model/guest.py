@@ -10,11 +10,11 @@ class Guest:
         self.__first_name = first_name
         self.__last_name = last_name
         self.__email = email
-        self.bookings = []
-        self.address = None
+        self.__bookings = []
+        self.__address = None
 
     def add_booking(self, booking: "Booking"):
-        self.bookings.append(booking)
+        self.__bookings.append(booking)
 
     @property
     def guestid(self):

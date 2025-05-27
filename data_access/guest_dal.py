@@ -37,3 +37,4 @@ class GuestDAL(BaseDAL):
         params = tuple([guest_id])
         self.execute(sql, params)
 
+

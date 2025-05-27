@@ -1,4 +1,5 @@
 from __future__ import annotations
+from datetime import date
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
 
@@ -7,7 +8,7 @@ if TYPE_CHECKING:
     from model.room import Room
 
 class Booking:
-    def __init__ (self, booking_id: int, check_in_date: str, check_out_date: str, is_cancelled: bool, total_amount: float):
+    def __init__ (self, booking_id: int, check_in_date: date, check_out_date: date, is_cancelled: bool, total_amount: float):
         self.__booking_id = booking_id
         self.__check_in_date = check_in_date
         self.__check_out_date = check_out_date

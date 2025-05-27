@@ -3,9 +3,6 @@ from datetime import date
 import model
 import data_access
 
-class TooLittleRoomException(Exception):
-    pass
-
 class BookingManager:
     def __init__(self):
         self.__booking_dal = data_access.BookingDAL()
@@ -21,7 +18,7 @@ class BookingManager:
        days = (check_out - check_in).days
        total_amount = days * room.price_per_night
        if room.room_type.max_guests < number_of_guests:
-           raise TooLittleRoomException("Room does not have enough capacity")
+           raise Exception("Room does not have enough capacity")
 
        return self.__booking_dal.create_booking(guest, room, check_in, check_out, total_amount)
 

@@ -19,7 +19,7 @@ class RoomTypeDAL(BaseDAL):
 
     def update_room_type(self, room_type: model.RoomType) -> model.RoomType:
         sql = """
-        UPDATE RoomType SET description = ?, max_guest = ? WHERE room_type_id = ?
+        UPDATE RoomType SET description = ?, max_guest = ? WHERE type_id = ?
         """
         params = tuple([
             room_type.description,
@@ -29,10 +29,10 @@ class RoomTypeDAL(BaseDAL):
 
     def delete_room_type(self, room_type: model.RoomType) -> model.RoomType:
         sql = """
-        DELETE FROM RoomType WHERE room_type_id = ?
+        DELETE FROM RoomType WHERE type_id = ?
         """
         params = (
-            room_type.room_type_id,
+            room_type.type_id,
         )
         self.execute(sql, params)
 
