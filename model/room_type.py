@@ -9,7 +9,7 @@ class RoomType:
         self.__room_type_id = room_type_id
         self.__description = description
         self.__max_guests = max_guests
-        self._rooms = []
+        self._rooms = [] #TODO: remove
 
 
     def add_room(self, room: "Room"):

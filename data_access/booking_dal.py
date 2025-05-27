@@ -1,5 +1,7 @@
 from __future__ import annotations
+from datetime import date
 
+import model
 from data_access.base_dal import BaseDAL
 from model.booking import Booking
 
@@ -9,29 +11,30 @@ class BookingDAL(BaseDAL):
 
     def create_booking(
         self,
-        booking_id: int,
-        check_in_date: str,
-        check_out_date: str,
+        guest: model.Guest,
+        room: model.Room,
+        check_in_date: date,
+        check_out_date: date,
         total_amount: float,
-        is_cancelled: bool = False
     ) -> Booking:
         if check_in_date is None or check_out_date is None or total_amount is None:
             raise ValueError("Missing required fields")
 
         sql = """
-        INSERT INTO Booking (BookingId, CheckInDate, CheckOutDate, IsCancelled, TotalAmount)
-        VALUES (?, ?, ?, ?, ?)
+        INSERT INTO Booking (guest_id, room_id, check_in_date, check_out_date, is_cancelled, total_amount)
+        VALUES (?, ?, ?, ?, ?, ?)
         """
         params = (
-            booking_id,
+            guest.guestid,
+            room.roomid,
             check_in_date,
             check_out_date,
-            int(is_cancelled),  # SQLite kennt kein BOOLEAN
+            int(False),  # SQLite kennt kein BOOLEAN
             total_amount
         )
 
-        self.execute(sql, params)
-        return Booking(booking_id, check_in_date, check_out_date, is_cancelled, total_amount)
+        lastrowid, _ = self.execute(sql, params)
+        return Booking(lastrowid, check_in_date, check_out_date, False, total_amount)
 
     def read_booking_by_id(self, booking_id: int) -> Booking | None:
         if booking_id is None:

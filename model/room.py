@@ -10,11 +10,11 @@ class Room:
         self.__room_number = room_number
         self.__price_per_night = price_per_night
         self.__hotel = None
-        self.bookings = []
+        self.__bookings = [] #TODO Prüfen eventuel auf Gast verbinden
         self.room_type = None
 
     def add_booking(self, booking):
-        self.bookings.append(booking)
+        self.__bookings.append(booking)
         booking.room = self
 
     @property
@@ -27,10 +27,10 @@ class Room:
 
     @room_type.setter
     def room_type(self, room_type: "RoomType"):
-        if not isinstance(room_type, RoomType):
+        from model.room_type import RoomType
+        if room_type and not isinstance(room_type, RoomType):
             raise ValueError("Room Type must be an instance of RoomType")
         self.__room_type = room_type
-        room_type.add_room(self)
 
     @property
     def roomid(self):
