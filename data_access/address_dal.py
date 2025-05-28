@@ -21,14 +21,16 @@ class AddressDAL(BaseDAL):
 
     def create_address(self, street: str, city: str, zip_code: int) -> model.Address:
         sql = """
-        INSERT INTO Address (street, city, zip_code) VALUES (?,?,?))
+        INSERT INTO Address (street, city, zip_code) 
+        VALUES (?,?,?)
         """
         params = (
             street,
             city,
             zip_code
         )
-        self.execute(sql, params)
+        lastrowid, _ = self.execute(sql, params)
+        return model.Address(lastrowid, street, city, zip_code)
 
     def update_address(self, address: model.Address):
         sql = """

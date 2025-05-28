@@ -9,7 +9,7 @@ class HotelManager:
         self.__hotel_dal = data_access.HotelDAL()
 
     def create_hotel(self, name: str, stars: int, address) -> model.Hotel:
-        self.__hotel_dal.create_hotel(name, stars, address)
+        self.__hotel_dal.create_hotel(name, stars, address) # TODO Logik einsetzen ob das Hotel bereits existiert
 
     def update_hotel(self, hotel_id: model.Hotel) -> None:
         self.__hotel_dal.update_hotel(hotel_id)

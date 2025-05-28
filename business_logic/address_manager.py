@@ -3,10 +3,10 @@ import data_access
 
 class AddressManager:
     def __init__(self):
-        self.__address_dal = data_access.AddressDAL(db_path = "database/hotel_reservation_sample.db")
+        self.__address_dal = data_access.AddressDAL()
 
-    def create_address(self, address: model.Address) -> model.Address:
-        return self.__address_dal.create_address(address)
+    def create_address(self, street: str, city: str, zip_code: int) -> model.Address:
+        return self.__address_dal.create_address(street, city, zip_code)
 
     def update_address(self, address: model.Address) -> model.Address:
         return self.__address_dal.update_address(address)
