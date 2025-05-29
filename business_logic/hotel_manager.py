@@ -25,3 +25,6 @@ class HotelManager:
 
     def search_hotels_by_city(self, city: str) -> list[model.Hotel]:
         return self.__hotel_dal.search_hotels_by_city(city)
+
+    def search_hotels_by_city_and_stars(self, city: str, stars: int) -> list[model.Hotel]:
+        return self.__hotel_dal.search_hotels_by_city_and_stars(city, stars)

@@ -75,5 +75,24 @@ class HotelDAL(BaseDAL):
             hotels.append(hotel)
         return hotels
 
+    def search_hotels_by_city_and_stars(self, city: str, stars: int) -> list[model.Hotel]:
+        sql = """
+        SELECT h.hotel_id, h.name, h.stars, a.address_id, a.street, a.city, a.zip_code FROM Hotel h
+        LEFT JOIN Address a ON h.address_id = a.address_id WHERE a.city LIKE ? AND h.stars >= ?
+        """
+        params = (
+            city,
+            stars
+        )
+        rows = self.fetchall(sql, (city, stars))
+
+        hotels: list[model.Hotel] = []
+        for hotel_id, name, stars, address_id, street, city_name, zip_code in rows:
+            addr = Address(address_id, street, city_name, zip_code)
+            hotel = model.Hotel(hotel_id, name, stars)
+            hotel.address = addr
+            hotels.append(hotel)
+        return hotels
+
 
 
