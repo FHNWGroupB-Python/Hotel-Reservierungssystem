@@ -9,7 +9,7 @@ class HotelManager:
         self.__hotel_dal = data_access.HotelDAL()
 
     def create_hotel(self, name: str, stars: int, address) -> model.Hotel:
-        self.__hotel_dal.create_hotel(name, stars, address) # TODO Logik einsetzen ob das Hotel bereits existiert
+        return self.__hotel_dal.create_hotel(name, stars, address) # TODO Logik einsetzen ob das Hotel bereits existiert
 
     def update_hotel(self, hotel_id: model.Hotel) -> None:
         self.__hotel_dal.update_hotel(hotel_id)
@@ -23,5 +23,5 @@ class HotelManager:
     def search_hotels_by_name(self, name: str) -> None:
         self.__hotel_dal.search_hotels_by_name(name)
 
-    def search_hotels_by_address(self, address: str) -> None:
-        self.__hotel_dal.search_hotels_by_address(address)
+    def search_hotels_by_city(self, city: str) -> list[model.Hotel]:
+        return self.__hotel_dal.search_hotels_by_city(city)
