@@ -66,10 +66,15 @@ class BookingDAL(BaseDAL):
         _, rowcount = self.execute(sql, (booking_id,))
         return rowcount > 0
 
-    def cancel_booking(self, booking_id: int):
+    def booking_exists(self, booking_id: int) -> bool:
+        # Check if the booking ID exists in the database
+        return booking_id in self.bookings
 
-        if booking_id in self.bookings:
-            del self.bookings[booking_id]  # Buchung wird entfernt
+
+    def cancel_booking(self, booking_id: int) -> None:
+        if self.booking_exists(booking_id):
+            del self.bookings[booking_id]
+
             print(f"Buchung {booking_id} erfolgreich storniert.")
         else:
             raise ValueError(f"Buchung mit ID {booking_id} wurde nicht gefunden.")
