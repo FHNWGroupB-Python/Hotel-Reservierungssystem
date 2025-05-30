@@ -8,6 +8,7 @@ from model.booking import Booking
 class BookingDAL(BaseDAL):
     def __init__(self, db_path:str = None):
         super().__init__(db_path)
+        self.bookings = {}
 
     def create_booking(
         self,
@@ -65,3 +66,10 @@ class BookingDAL(BaseDAL):
         _, rowcount = self.execute(sql, (booking_id,))
         return rowcount > 0
 
+    def cancel_booking(self, booking_id: int):
+
+        if booking_id in self.bookings:
+            del self.bookings[booking_id]  # Buchung wird entfernt
+            print(f"Buchung {booking_id} erfolgreich storniert.")
+        else:
+            raise ValueError(f"Buchung mit ID {booking_id} wurde nicht gefunden.")

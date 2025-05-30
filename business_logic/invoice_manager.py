@@ -19,8 +19,8 @@ class InvoiceManager:
 
 
 
-
     def read_invoice(self) -> list[model.Invoice]:
         return self.__invoice_dal.read_invoice()
+
 
 
