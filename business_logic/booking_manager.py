@@ -17,6 +17,7 @@ class BookingManager:
     ) -> model.Booking:
        days = (check_out - check_in).days
        total_amount = days * room.price_per_night
+
        if room.room_type.max_guests < number_of_guests:
            raise Exception("Room does not have enough capacity")
 

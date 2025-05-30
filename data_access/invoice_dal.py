@@ -18,11 +18,12 @@ class InvoiceDAL(BaseDAL):
         """
         self.execute(sql)
 
-    def create_invoice(self, issue_date: str, total_amount: float) -> model.Invoice:
+    def create_invoice(self, booking_id:int, issue_date: str, total_amount: float) -> model.Invoice:
         sql = """
-        INSERT INTO Invoice (issue_date, total_amount) VALUES (?,?)
+        INSERT INTO Invoice (booking_id, issue_date, total_amount) VALUES (?,?,?)
         """
         params = (
+            booking_id,
             issue_date,
             total_amount
         )

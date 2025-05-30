@@ -16,13 +16,19 @@
         </library>
       </libraries>
     </data-source>
-    <data-source source="LOCAL" name="hotel_reservation" uuid="484c6d12-25d7-4172-b2b1-f6deaa4ca440">
+    <data-source source="LOCAL" name="hotel_reservation" uuid="eeab43a0-4493-4284-9365-21fc5ca3c9f5">
       <driver-ref>sqlite.xerial</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
-      <jdbc-url>jdbc:sqlite:$PROJECT_DIR$/database/hotel_reservation.db</jdbc-url>
+      <jdbc-url>jdbc:sqlite:C:\Users\Raguj\PycharmProjects\Hotel-Reservierungssystem\database\hotel_reservation.db</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
       <libraries>
+        <library>
+          <url>file://$APPLICATION_CONFIG_DIR$/jdbc-drivers/Xerial SQLiteJDBC/3.45.1/org/xerial/sqlite-jdbc/3.45.1.0/sqlite-jdbc-3.45.1.0.jar</url>
+        </library>
+        <library>
+          <url>file://$APPLICATION_CONFIG_DIR$/jdbc-drivers/Xerial SQLiteJDBC/3.45.1/org/slf4j/slf4j-api/1.7.36/slf4j-api-1.7.36.jar</url>
+        </library>
         <library>
           <url>file://$APPLICATION_CONFIG_DIR$/jdbc-drivers/Xerial SQLiteJDBC/3.45.1/org/xerial/sqlite-jdbc/3.45.1.0/sqlite-jdbc-3.45.1.0.jar</url>
         </library>
