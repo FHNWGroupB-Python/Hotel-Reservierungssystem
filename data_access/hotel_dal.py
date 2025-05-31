@@ -94,5 +94,28 @@ class HotelDAL(BaseDAL):
             hotels.append(hotel)
         return hotels
 
+    def search_hotels_by_city_and_room_capacity(self, city: str, max_guests: int) -> list[model.Hotel]:
+        sql = """
+        SELECT h.hotel_id, h.name, h.stars, a.address_id, a.street, a.city, a.zip_code, r.room_number, r.price_per_night, rt.description, rt.max_guests FROM Hotel h 
+        LEFT JOIN Address a ON h.address_id = a.address_id
+        JOIN Room r ON r.hotel_id = h.hotel_id
+        JOIN Room_Type rt ON rt.type_id = r.room_id
+        WHERE a.city LIKE ? AND rt.max_guests >= ?
+        """
+        params = (
+            city,
+            max_guests,
+        )
+        rows = self.fetchall(sql, params)
 
-
+        hotels: list[model.Hotel] = []
+        for hotel_id, name, stars, address_id, street, city_name, zip_code, room_number, price_per_night, description, max_guests in rows:
+            addr = Address(address_id, street, city_name, zip_code)
+            hotel = model.Hotel(hotel_id, name, stars)
+            hotel.address = addr
+            hotel.room_number = room_number
+            hotel.price_per_night = price_per_night
+            hotel.description = description
+            hotel.max_guests = max_guests
+            hotels.append(hotel)
+        return hotels
