@@ -8,7 +8,7 @@ from model.booking import Booking
 class BookingDAL(BaseDAL):
     def __init__(self, db_path:str = None):
         super().__init__(db_path)
-        self.bookings = {}
+
 
     def create_booking(
         self,
@@ -67,14 +67,18 @@ class BookingDAL(BaseDAL):
         return rowcount > 0
 
     def booking_exists(self, booking_id: int) -> bool:
-        # Check if the booking ID exists in the database
-        return booking_id in self.bookings
-
+        # SQL-Abfrage, um die Existenz der Buchung zu prüfen
+        sql = "SELECT 1 FROM Booking WHERE BookingId = ? LIMIT 1"
+        result = self.fetchone(sql, (booking_id,))
+        return result is not None
 
     def cancel_booking(self, booking_id: int) -> None:
+        # Überprüfen, ob die Buchung existiert
         if self.booking_exists(booking_id):
-            del self.bookings[booking_id]
-
+            # SQL-Befehl zum Abbrechen verwenden
+            sql = "UPDATE bookings SET is_cancelled = 1 WHERE booking_id = ?"
+            self.execute(sql, (booking_id,))  # Ausführen der SQL-Anweisung
             print(f"Buchung {booking_id} erfolgreich storniert.")
         else:
+            # Buchung existiert nicht, Fehler werfen
             raise ValueError(f"Buchung mit ID {booking_id} wurde nicht gefunden.")

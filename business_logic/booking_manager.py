@@ -30,7 +30,7 @@ class BookingManager:
         if not isinstance(booking_id, int) or booking_id <= 0:
             raise ValueError("Ungültige Buchungs-ID. Bitte geben Sie eine positive ganze Zahl ein.")
         if not self.__booking_dal.booking_exists(booking_id):
-            raise ValueError("Die Buchung mit der ID {booking_id} existiert nicht.")
+            raise ValueError(f"Die Buchung mit der ID {booking_id} existiert nicht.")
         self.__booking_dal.cancel_booking(booking_id)
 
     def show_booking_details(self, booking: model.Booking) -> str:
