@@ -123,20 +123,20 @@ class HotelDAL(BaseDAL):
 
     def search_hotels_by_city_and_availability(self, city: str, check_in_date: date, check_out_date: date) -> list[model.Hotel]:
         sql = """
-        SELECT h.hotel_id, h.name, h.stars, 
+        SELECT (h.hotel_id, h.name, h.stars, 
         a.address_id, a.street, a.city, a.zip_code, 
         r.room_number, r.price_per_night, 
         rt.description, rt.max_guests, 
-        b.check_in_date, b.check_out_date, b.is_cancelled
+        b.check_in_date, b.check_out_date, b.is_cancelled)
         FROM Hotel h
         LEFT JOIN Address a ON h.address_id = a.address_id
         LEFT JOIN Room r ON r.hotel_id = h.hotel_id
         LEFT JOIN Room_Type rt ON rt.type_id = r.room_id
         LEFT JOIN Booking b ON b.room_id = r.room_id
         AND b.is_cancelled = 0
-        AND b.check_in_date < ?
-        AND b.check_out_date > ?
-        WHERE a.city LIKE ? AND b.booking_id IS NULL
+        AND b.check_in_date < (?)
+        AND b.check_out_date > (?)
+        WHERE a.city LIKE (?) AND b.booking_id IS NULL
         """
         params = (
             check_in_date,

@@ -35,4 +35,4 @@ class HotelManager:
         return self.__hotel_dal.search_hotels_by_city_and_room_capacity(city, max_guests)
 
     def search_hotels_by_city_and_availability(self, city: str, check_in_date: date, check_out_date: date) -> list[model.Hotel]:
-        return self.__hotel_dal.search_hotels_by_city_and_availability(city, check_in_date, check_out_date)
+        return self.__hotel_dal.search_hotels_by_city_and_availability(city, check_in_date, check_out_date) # TODO Logik für Verfügbarkeit der Checkin und Checkout erstellen
