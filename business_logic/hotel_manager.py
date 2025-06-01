@@ -3,7 +3,6 @@ from datetime import date
 import model
 import data_access
 
-from model.address import Address
 
 
 class HotelManager:
@@ -36,3 +35,6 @@ class HotelManager:
 
     def search_hotels_by_city_and_availability(self, city: str, check_in_date: date, check_out_date: date) -> list[model.Hotel]:
         return self.__hotel_dal.search_hotels_by_city_and_availability(city, check_in_date, check_out_date) # TODO Logik für Verfügbarkeit der Checkin und Checkout erstellen
+
+    def search_hotels_by_city_availability_stars_capacity(self, city: str, check_in_date: date, check_out_date: date, stars: int, max_guests: int) -> list[model.Hotel]:
+        return self.__hotel_dal.search_hotels_by_city_availability_stars_capacity(city, check_in_date, check_out_date, stars, max_guests) # TODO Logik Verfügbarkeit einfügen
