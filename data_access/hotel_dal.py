@@ -1,4 +1,5 @@
 from __future__ import annotations
+from datetime import date
 
 import model
 from model.address import Address
@@ -104,7 +105,7 @@ class HotelDAL(BaseDAL):
         """
         params = (
             city,
-            max_guests,
+            max_guests
         )
         rows = self.fetchall(sql, params)
 
@@ -117,5 +118,44 @@ class HotelDAL(BaseDAL):
             hotel.price_per_night = price_per_night
             hotel.description = description
             hotel.max_guests = max_guests
+            hotels.append(hotel)
+        return hotels
+
+    def search_hotels_by_city_and_availability(self, city: str, check_in_date: date, check_out_date: date) -> list[model.Hotel]:
+        sql = """
+        SELECT h.hotel_id, h.name, h.stars, 
+        a.address_id, a.street, a.city, a.zip_code, 
+        r.room_number, r.price_per_night, 
+        rt.description, rt.max_guests, 
+        b.check_in_date, b.check_out_date, b.is_cancelled
+        FROM Hotel h
+        LEFT JOIN Address a ON h.address_id = a.address_id
+        LEFT JOIN Room r ON r.hotel_id = h.hotel_id
+        LEFT JOIN Room_Type rt ON rt.type_id = r.room_id
+        LEFT JOIN Booking b ON b.room_id = r.room_id
+        AND b.is_cancelled = 0
+        AND b.check_in_date < ?
+        AND b.check_out_date > ?
+        WHERE a.city LIKE ? AND b.booking_id IS NULL
+        """
+        params = (
+            check_in_date,
+            check_out_date,
+            city
+        )
+        rows = self.fetchall(sql, params)
+
+        hotels: list[model.Hotel] = []
+        for hotel_id, name, stars, address_id, street, city, zip_code, room_number, price_per_night, description, max_guests, check_in_date, check_out_date, is_cancelled in rows:
+            addr = Address(address_id, street, city, zip_code)
+            hotel = model.Hotel(hotel_id, name, stars)
+            hotel.address = addr
+            hotel.room_number = room_number
+            hotel.price_per_night = price_per_night
+            hotel.description = description
+            hotel.max_guests = max_guests
+            hotel.check_in_date = check_in_date
+            hotel.check_out_date = check_out_date
+            hotel.is_cancelled = is_cancelled
             hotels.append(hotel)
         return hotels

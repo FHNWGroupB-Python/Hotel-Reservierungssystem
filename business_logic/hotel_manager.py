@@ -1,3 +1,5 @@
+from datetime import date
+
 import model
 import data_access
 
@@ -31,3 +33,6 @@ class HotelManager:
 
     def search_hotels_by_city_and_room_capacity(self, city: str, max_guests: int) -> list[model.Hotel]:
         return self.__hotel_dal.search_hotels_by_city_and_room_capacity(city, max_guests)
+
+    def search_hotels_by_city_and_availability(self, city: str, check_in_date: date, check_out_date: date) -> list[model.Hotel]:
+        return self.__hotel_dal.search_hotels_by_city_and_availability(city, check_in_date, check_out_date)
