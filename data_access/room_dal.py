@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import model
 from data_access.base_dal import BaseDAL
 
 class RoomDAL(BaseDAL):
@@ -47,3 +48,26 @@ class RoomDAL(BaseDAL):
         """
         params = tuple([room_id])
         self.execute(sql, params)
+
+    def get_room_info_by_hotel(self, name: str) -> list[model.Room]:
+        sql = """
+        SELECT r.room_id, room_number, r.price_per_night, rt.type_id,rt.description, rt.max_guests, h.hotel_id, h.name, h.stars
+        FROM Room r
+        JOIN Hotel h on r.hotel_id = h.hotel_id
+        JOIN Room_Type rt ON rt.type_id = r.room_id
+        WHERE h.name = (?)
+        """
+        params = (
+            name,
+        )
+        rows = self.fetchall(sql, params)
+
+        rooms: list[model.Room] = []
+        for room_id, room_number, price_per_night, type_id, description, max_guests, hotel_id, name, stars in rows:
+
+            room_type = model.RoomType(type_id, description, max_guests)
+            room = model.Room(room_id, room_number, price_per_night)
+            room.room_type = room_type
+            rooms.append(room)
+        return rooms
+
