@@ -78,7 +78,7 @@ class HotelDAL(BaseDAL):
 
     def search_hotels_by_city_and_stars(self, city: str, stars: int) -> list[model.Hotel]:
         sql = """
-        SELECT (h.hotel_id, h.name, h.stars, a.address_id, a.street, a.city, a.zip_code) FROM Hotel h
+        SELECT h.hotel_id, h.name, h.stars, a.address_id, a.street, a.city, a.zip_code FROM Hotel h
         LEFT JOIN Address a ON h.address_id = a.address_id WHERE a.city LIKE (?) AND h.stars >= (?)
         """
         params = (
@@ -97,11 +97,11 @@ class HotelDAL(BaseDAL):
 
     def search_hotels_by_city_and_room_capacity(self, city: str, max_guests: int) -> list[model.Hotel]:
         sql = """
-        SELECT (h.hotel_id, h.name, h.stars, a.address_id, a.street, a.city, a.zip_code, r.room_number, r.price_per_night, rt.description, rt.max_guests) FROM Hotel h 
+        SELECT h.hotel_id, h.name, h.stars, a.address_id, a.street, a.city, a.zip_code, r.room_number, r.price_per_night, rt.description, rt.max_guests FROM Hotel h 
         LEFT JOIN Address a ON h.address_id = a.address_id
         JOIN Room r ON r.hotel_id = h.hotel_id
         JOIN Room_Type rt ON rt.type_id = r.room_id
-        WHERE a.city LIKE (?) AND rt.max_guests >= ?
+        WHERE a.city LIKE (?) AND rt.max_guests >= (?)
         """
         params = (
             city,
@@ -123,11 +123,11 @@ class HotelDAL(BaseDAL):
 
     def search_hotels_by_city_and_availability(self, city: str, check_in_date: date, check_out_date: date) -> list[model.Hotel]:
         sql = """
-        SELECT (h.hotel_id, h.name, h.stars, 
+        SELECT h.hotel_id, h.name, h.stars, 
         a.address_id, a.street, a.city, a.zip_code, 
         r.room_number, r.price_per_night, 
         rt.description, rt.max_guests, 
-        b.check_in_date, b.check_out_date, b.is_cancelled)
+        b.check_in_date, b.check_out_date, b.is_cancelled
         FROM Hotel h
         LEFT JOIN Address a ON h.address_id = a.address_id
         LEFT JOIN Room r ON r.hotel_id = h.hotel_id
@@ -201,5 +201,22 @@ class HotelDAL(BaseDAL):
             hotel.check_in_date = check_in_date
             hotel.check_out_date = check_out_date
             hotel.is_cancelled = is_cancelled
+            hotels.append(hotel)
+        return hotels
+
+    def get_all_hotel_info(self) -> list[model.Hotel]:
+        sql = """
+        SELECT DISTINCT h.hotel_id, h.name, h.stars,
+        a.address_id, a.street, a.city, a.zip_code 
+        FROM Hotel h 
+        LEFT JOIN Address a ON h.address_id = a.address_id
+        """
+        results = self.fetchall(sql)
+
+        hotels: list[model.Hotel] = []
+        for hotel_id, name, stars, address_id, street, city, zip_code in results:
+            addr = Address(address_id, street, city, zip_code)
+            hotel = model.Hotel(hotel_id, name, stars)
+            hotel.address = addr
             hotels.append(hotel)
         return hotels

@@ -38,3 +38,7 @@ class HotelManager:
 
     def search_hotels_by_city_availability_stars_capacity(self, city: str, check_in_date: date, check_out_date: date, stars: int, max_guests: int) -> list[model.Hotel]:
         return self.__hotel_dal.search_hotels_by_city_availability_stars_capacity(city, check_in_date, check_out_date, stars, max_guests) # TODO Logik Verfügbarkeit einfügen
+
+    def get_all_hotel_info(self) ->list[model.Hotel]:
+        return self.__hotel_dal.get_all_hotel_info()
+
