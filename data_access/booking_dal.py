@@ -42,8 +42,8 @@ class BookingDAL(BaseDAL):
             raise ValueError("Booking ID is required")
 
         sql = """
-        SELECT BookingId, CheckInDate, CheckOutDate, IsCancelled, TotalAmount
-        FROM Booking WHERE BookingId = ?
+        SELECT booking_id, check_in_date, check_out_date, is_cancelled, total_amount
+        FROM Booking WHERE booking_id = ?
         """
         result = self.fetchone(sql, (booking_id,))
         if result:
@@ -53,7 +53,7 @@ class BookingDAL(BaseDAL):
 
     def read_all_bookings(self) -> list[Booking]:
         sql = """
-        SELECT BookingId, CheckInDate, CheckOutDate, IsCancelled, TotalAmount FROM Booking
+        SELECT booking_id, check_in_date, check_out_date, is_cancelled, total_amount FROM Booking
         """
         results = self.fetchall(sql)
         return [
@@ -68,17 +68,19 @@ class BookingDAL(BaseDAL):
 
     def booking_exists(self, booking_id: int) -> bool:
         # SQL-Abfrage, um die Existenz der Buchung zu prüfen
-        sql = "SELECT 1 FROM Booking WHERE BookingId = ? LIMIT 1"
+        sql = "SELECT * FROM Booking WHERE booking_id = ?"
         result = self.fetchone(sql, (booking_id,))
         return result is not None
 
     def cancel_booking(self, booking_id: int) -> None:
-        # Überprüfen, ob die Buchung existiert
-        if self.booking_exists(booking_id):
-            # SQL-Befehl zum Abbrechen verwenden
-            sql = "UPDATE bookings SET is_cancelled = 1 WHERE booking_id = ?"
-            self.execute(sql, (booking_id,))  # Ausführen der SQL-Anweisung
-            print(f"Buchung {booking_id} erfolgreich storniert.")
+        # Überprüfen, ob die Buchung bereits storniert ist
+        if not booking_id:
+            raise ValueError("Give a valid Booking ID")
+        booking = self.read_booking_by_id(booking_id)
+        if booking.is_cancelled:
+            raise ValueError("Booking already cancelled.")
+
         else:
-            # Buchung existiert nicht, Fehler werfen
-            raise ValueError(f"Buchung mit ID {booking_id} wurde nicht gefunden.")
+            sql = """Update Booking SET is_cancelled = ? WHERE booking_id = ?"""
+            self.execute(sql, (booking_id,))
+            print(f"Booking with Booking Id {booking_id} cancelled successfully.")
