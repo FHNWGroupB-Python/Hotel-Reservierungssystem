@@ -9,6 +9,17 @@ class BookingDAL(BaseDAL):
     def __init__(self, db_path:str = None):
         super().__init__(db_path)
 
+    def calculate_dynamic_price(self, base_price: float, check_in_date: date) -> float:
+        high_season = {6, 7, 8}  # Juni, Juli, August
+        off_season = {1, 2, 11}  # Januar, Februar, November
+        month = check_in_date.month
+
+        if month in high_season:
+            return base_price * 1.2  # 20% Aufschlag
+        elif month in off_season:
+            return base_price * 0.85  # 15% Rabatt
+        else:
+            return base_price
 
     def create_booking(
         self,
@@ -17,9 +28,13 @@ class BookingDAL(BaseDAL):
         check_in_date: date,
         check_out_date: date,
         total_amount: float,
+        base_amount= float, # Grundlage für Preis
     ) -> Booking:
         if check_in_date is None or check_out_date is None or total_amount is None:
             raise ValueError("Missing required fields")
+
+        # Berechnung des dynamischen Preises
+        total_amount = self.calculate_dynamic_price(base_amount, check_in_date)
 
         sql = """
         INSERT INTO Booking (guest_id, room_id, check_in_date, check_out_date, is_cancelled, total_amount)
@@ -85,3 +100,4 @@ class BookingDAL(BaseDAL):
             params = (1, booking_id)
             self.execute(sql, params)
             print(f"Booking with Booking Id {booking_id} cancelled successfully.")
+
