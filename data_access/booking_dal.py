@@ -82,5 +82,5 @@ class BookingDAL(BaseDAL):
 
         else:
             sql = """Update Booking SET is_cancelled = ? WHERE booking_id = ?"""
-            self.execute(sql, (booking_id,))
+            self.execute(sql, 1, (booking_id,))
             print(f"Booking with Booking Id {booking_id} cancelled successfully.")
