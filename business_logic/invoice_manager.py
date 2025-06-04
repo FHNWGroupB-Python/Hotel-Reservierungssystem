@@ -3,7 +3,7 @@ import data_access
 
 class InvoiceManager:
     def __init__(self):
-        self.__invoice_dal = data_access.InvoiceDAL(db_path = "database/hotel_reservation_sample.db")
+        self.__invoice_dal = data_access.InvoiceDAL()
 
     def create_invoice(self, booking_id: int, issue_date: str, total_amount: float) -> model.Invoice:
         # Ensure booking_id is provided and valid

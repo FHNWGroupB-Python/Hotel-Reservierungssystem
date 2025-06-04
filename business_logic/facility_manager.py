@@ -3,7 +3,7 @@ import data_access
 
 class FacilityManager:
     def __init__(self):
-        self.__facility_dal = data_access.FacilityDAL(db_path = "database/hotel_reservation_sample.db")
+        self.__facility_dal = data_access.FacilityDAL()
 
     def create_facility(self, facility: model.Facility) -> model.Facility:
         return self.__facility_dal.create_facility(facility)
