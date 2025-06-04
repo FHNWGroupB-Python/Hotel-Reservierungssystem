@@ -35,3 +35,17 @@ class BookingManager:
 
     def show_booking_details(self, booking: model.Booking) -> str:
         return booking.get_details()
+
+
+from data_access.booking_dal import BookingDAL
+
+class BookingManager:
+    def __init__(self):
+        self.booking_dal = BookingDAL()
+
+    def cancel_booking(self, booking_id: int) -> bool:
+        booking = self.booking_dal.get_booking_by_id(booking_id)
+        if booking:
+            return self.booking_dal.delete_booking(booking_id)
+        return False
+
