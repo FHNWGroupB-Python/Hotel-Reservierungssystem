@@ -25,8 +25,15 @@ class BookingManager:
     def update_booking(self, booking: model.Booking) -> None:
         self.__booking_dal.update_booking(booking)
 
-    def cancel_booking(self, booking: model.Booking) -> None:
-        self.__booking_dal.cancel_booking(booking)
+    def cancel_booking(self, booking_id: int) -> None:
+        if not isinstance(booking_id, int) or booking_id <= 0:
+            raise ValueError("Ungültige Buchungs-ID. Bitte geben Sie eine positive ganze Zahl ein.")
+        if not self.__booking_dal.booking_exists(booking_id):
+            raise ValueError(f"Die Buchung mit der ID {booking_id} existiert nicht.")
+        self.__booking_dal.cancel_booking(booking_id)
 
     def show_booking_details(self, booking: model.Booking) -> str:
         return booking.get_details()
+
+    def get_all_bookings(self) -> list[model.Booking]:
+        return self.__booking_dal.get_all_bookings()

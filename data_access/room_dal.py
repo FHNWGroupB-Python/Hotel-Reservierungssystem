@@ -104,3 +104,6 @@ class RoomDAL(BaseDAL):
             rooms.append(room)
         return rooms
 
+
+
+

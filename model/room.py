@@ -20,6 +20,10 @@ class Room:
     def hotel(self) -> "Hotel":
         return self.__hotel
 
+    @hotel.setter
+    def hotel(self, hotel: "Hotel"):
+        self.__hotel = hotel
+
     @property
     def room_type(self) -> "RoomType":
         return self.__room_type
