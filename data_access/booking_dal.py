@@ -105,7 +105,7 @@ class BookingDAL(BaseDAL):
             bookings.append(booking)
         return bookings
 
-    def calculate_dynamic_price(self, base_price: float, check_in_date: date) -> float:
+    def calculate_dynamic_price(self, base_price: float, check_in_date: date) -> float: # TODO gehört in den Manager
         high_season = {6, 7, 8}  # Juni, Juli, August
         off_season = {1, 2, 11}  # Januar, Februar, November
         month = check_in_date.month
@@ -130,7 +130,7 @@ class BookingDAL(BaseDAL):
             raise ValueError("Missing required fields")
 
         # Berechnung des dynamischen Preises
-        total_amount = self.calculate_dynamic_price(base_amount, check_in_date)
+        total_amount = self.calculate_dynamic_price(base_amount, check_in_date) # TODO Logik in den Manager versetzen
 
     def read_all_bookings(self) -> list[Booking]:
         sql = """

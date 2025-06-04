@@ -12,8 +12,8 @@ class HotelManager:
     def create_hotel(self, name: str, stars: int, address) -> model.Hotel:
         return self.__hotel_dal.create_hotel(name, stars, address) # TODO Logik einsetzen ob das Hotel bereits existiert
 
-    def update_hotel(self, hotel_id:int, name: str, stars: int) -> model.Hotel:
-        return self.__hotel_dal.update_hotel(hotel_id, name, stars)
+    def update_hotel(self, hotel:model.Hotel) -> model.Hotel:
+        return self.__hotel_dal.update_hotel(hotel.hotel_id, hotel.name, hotel.stars)
 
     def delete_hotel(self, hotel_id: int) -> None:
         self.__hotel_dal.delete_hotel(hotel_id)
