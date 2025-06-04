@@ -4,22 +4,13 @@ from datetime import date
 import model
 from data_access.base_dal import BaseDAL
 from model.booking import Booking
+from model.hotel import Hotel
+from model.room import Room
+from model.guest import Guest
 
 class BookingDAL(BaseDAL):
     def __init__(self, db_path:str = None):
         super().__init__(db_path)
-
-    def calculate_dynamic_price(self, base_price: float, check_in_date: date) -> float:
-        high_season = {6, 7, 8}  # Juni, Juli, August
-        off_season = {1, 2, 11}  # Januar, Februar, November
-        month = check_in_date.month
-
-        if month in high_season:
-            return base_price * 1.2  # 20% Aufschlag
-        elif month in off_season:
-            return base_price * 0.85  # 15% Rabatt
-        else:
-            return base_price
 
     def create_booking(
         self,
@@ -28,13 +19,9 @@ class BookingDAL(BaseDAL):
         check_in_date: date,
         check_out_date: date,
         total_amount: float,
-        base_amount= float, # Grundlage für Preis
     ) -> Booking:
         if check_in_date is None or check_out_date is None or total_amount is None:
             raise ValueError("Missing required fields")
-
-        # Berechnung des dynamischen Preises
-        total_amount = self.calculate_dynamic_price(base_amount, check_in_date)
 
         sql = """
         INSERT INTO Booking (guest_id, room_id, check_in_date, check_out_date, is_cancelled, total_amount)
@@ -57,14 +44,93 @@ class BookingDAL(BaseDAL):
             raise ValueError("Booking ID is required")
 
         sql = """
-        SELECT booking_id, check_in_date, check_out_date, is_cancelled, total_amount
-        FROM Booking WHERE booking_id = ?
+        SELECT BookingId, CheckInDate, CheckOutDate, IsCancelled, TotalAmount
+        FROM Booking WHERE BookingId = ?
         """
         result = self.fetchone(sql, (booking_id,))
         if result:
             booking_id, check_in, check_out, is_cancelled, total_amount = result
             return Booking(booking_id, check_in, check_out, bool(is_cancelled), total_amount)
         return None
+
+    def read_all_bookings(self) -> list[Booking]:
+        sql = """
+        SELECT BookingId, CheckInDate, CheckOutDate, IsCancelled, TotalAmount FROM Booking
+        """
+        results = self.fetchall(sql)
+        return [
+            Booking(booking_id, check_in, check_out, bool(is_cancelled), total_amount)
+            for (booking_id, check_in, check_out, is_cancelled, total_amount) in results
+        ]
+
+    def get_all_bookings(self) -> list[Booking]:
+        sql = """
+        SELECT b.booking_id, b.check_in_date, b.check_out_date,
+        g.guest_id, g.first_name, g.last_name, 
+        r.room_id, r.room_number, 
+        h.hotel_id, h.name 
+        FROM Booking b        
+        JOIN Guest g ON b.guest_id = g.guest_id        
+        JOIN Room r ON b.room_id = r.room_id        
+        JOIN Hotel h ON r.hotel_id = h.hotel_id
+        """
+        results = self.fetchall(sql)
+
+        bookings: list[Booking] = []
+        for (
+            booking_id,
+            check_in_date,
+            check_out_date,
+            guest_id,
+            first_name,
+            last_name,
+            room_id,
+            room_number,
+            hotel_id,
+            hotel_name
+        ) in results:
+            hotel = Hotel(hotel_id, hotel_name, None)
+            room = Room(room_id, room_number, None)
+            room.hotel = hotel
+            guest = Guest(guest_id, first_name, last_name, None)
+            booking = Booking(
+                booking_id,
+                check_in_date,
+                check_out_date,
+                room,
+                guest
+            )
+            booking.room = room
+            booking.guest = guest
+            bookings.append(booking)
+        return bookings
+
+    def calculate_dynamic_price(self, base_price: float, check_in_date: date) -> float:
+        high_season = {6, 7, 8}  # Juni, Juli, August
+        off_season = {1, 2, 11}  # Januar, Februar, November
+        month = check_in_date.month
+
+        if month in high_season:
+            return base_price * 1.2  # 20% Aufschlag
+        elif month in off_season:
+            return base_price * 0.85  # 15% Rabatt
+        else:
+            return base_price
+
+    def create_booking(
+            self,
+            guest: model.Guest,
+            room: model.Room,
+            check_in_date: date,
+            check_out_date: date,
+            total_amount: float,
+            base_amount=float,  # Grundlage für Preis
+    ) -> Booking:
+        if check_in_date is None or check_out_date is None or total_amount is None:
+            raise ValueError("Missing required fields")
+
+        # Berechnung des dynamischen Preises
+        total_amount = self.calculate_dynamic_price(base_amount, check_in_date)
 
     def read_all_bookings(self) -> list[Booking]:
         sql = """
@@ -77,7 +143,7 @@ class BookingDAL(BaseDAL):
         ]
 
     def delete_booking(self, booking_id: int) -> bool:
-        sql = "DELETE FROM Booking WHERE BookingId = ?"
+        sql = "DELETE FROM Booking WHERE booking_id = ?"
         _, rowcount = self.execute(sql, (booking_id,))
         return rowcount > 0
 
@@ -100,4 +166,7 @@ class BookingDAL(BaseDAL):
             params = (1, booking_id)
             self.execute(sql, params)
             print(f"Booking with Booking Id {booking_id} cancelled successfully.")
+
+
+
 

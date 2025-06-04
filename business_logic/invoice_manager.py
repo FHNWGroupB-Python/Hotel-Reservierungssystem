@@ -1,6 +1,5 @@
 import model
 import data_access
-from datetime import date
 
 class InvoiceManager:
     def __init__(self):
@@ -14,13 +13,8 @@ class InvoiceManager:
         # Ensure issue_date is a valid date
         if not isinstance(issue_date, str):
             raise ValueError("Invalid issue_date")
-
         return self.__invoice_dal.create_invoice(booking_id, issue_date, total_amount)
-
-
 
     def read_invoice(self) -> list[model.Invoice]:
         return self.__invoice_dal.read_invoice()
-
-
 
