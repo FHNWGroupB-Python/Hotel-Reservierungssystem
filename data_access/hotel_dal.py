@@ -27,16 +27,17 @@ class HotelDAL(BaseDAL):
         lastrowid, _ = self.execute(sql, params)
         return model.Hotel(lastrowid, name, stars)
 
-    def update_hotel(self, name: str, stars: int) -> model.Hotel:
+    def update_hotel(self, hotel_id: int, name: str, stars: int) -> model.Hotel:
         sql = """
         UPDATE Hotel SET name = ?, stars = ? WHERE hotel_id = ?
         """
         params = tuple([
             name,
             stars,
+            hotel_id
         ])
         self.execute(sql, params)
-        return model.Hotel(name, stars)
+        return model.Hotel(name, stars, hotel_id)
 
     def delete_hotel(self, hotel_id: int) -> None:
         sql = """
