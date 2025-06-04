@@ -20,7 +20,7 @@ class InvoiceDAL(BaseDAL):
 
     def create_invoice(self, booking_id: int, issue_date: str, total_amount: float) -> model.Invoice:
         sql = """
-        INSERT INTO Invoice booking_id, issue_date, total_amount VALUES (?,?,?)
+        INSERT INTO Invoice (booking_id, issue_date, total_amount) VALUES (?,?,?)
         """
         params = (
             booking_id,
@@ -28,5 +28,7 @@ class InvoiceDAL(BaseDAL):
             total_amount
         )
         last_row_id, _ = self.execute(sql, params)
-        return model.Invoice(invoice_id=last_row_id, booking_id=booking_id, issue_date=issue_date, total_amount=total_amount)
+
+
+        return model.Invoice(invoiceid=last_row_id, booking_id=booking_id, issue_date=issue_date, total_amount=total_amount)
 

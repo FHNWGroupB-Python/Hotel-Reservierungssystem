@@ -44,8 +44,8 @@ class BookingDAL(BaseDAL):
             raise ValueError("Booking ID is required")
 
         sql = """
-        SELECT BookingId, CheckInDate, CheckOutDate, IsCancelled, TotalAmount
-        FROM Booking WHERE BookingId = ?
+        SELECT booking_id, check_in_date, check_out_date, is_cancelled, total_amount
+        FROM Booking WHERE booking_id = ?
         """
         result = self.fetchone(sql, (booking_id,))
         if result:
@@ -55,7 +55,7 @@ class BookingDAL(BaseDAL):
 
     def read_all_bookings(self) -> list[Booking]:
         sql = """
-        SELECT BookingId, CheckInDate, CheckOutDate, IsCancelled, TotalAmount FROM Booking
+        SELECT booking_id, check_in_date, check_out_date, is_cancelled, total_amount FROM Booking
         """
         results = self.fetchall(sql)
         return [
