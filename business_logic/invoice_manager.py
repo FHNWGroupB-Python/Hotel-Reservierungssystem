@@ -1,10 +1,9 @@
 import model
 import data_access
-from datetime import date
 
 class InvoiceManager:
     def __init__(self):
-        self.__invoice_dal = data_access.InvoiceDAL(db_path = "database/hotel_reservation_sample.db")
+        self.__invoice_dal = data_access.InvoiceDAL()
 
     def create_invoice(self, booking_id: int, issue_date: str, total_amount: float) -> model.Invoice:
         # Ensure booking_id is provided and valid
@@ -14,13 +13,8 @@ class InvoiceManager:
         # Ensure issue_date is a valid date
         if not isinstance(issue_date, str):
             raise ValueError("Invalid issue_date")
-
         return self.__invoice_dal.create_invoice(booking_id, issue_date, total_amount)
-
-
 
     def read_invoice(self) -> list[model.Invoice]:
         return self.__invoice_dal.read_invoice()
-
-
 
