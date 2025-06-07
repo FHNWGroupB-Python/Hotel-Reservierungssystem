@@ -1,6 +1,8 @@
 from __future__ import annotations
 from datetime import date
 
+import pandas as pd
+
 import model
 from data_access.base_dal import BaseDAL
 from model.booking import Booking
@@ -166,6 +168,18 @@ class BookingDAL(BaseDAL):
             params = (1, booking_id)
             self.execute(sql, params)
             print(f"Booking with Booking Id {booking_id} cancelled successfully.")
+
+    def get_famous_room_type(self) -> pd.Dataframe:
+        sql = """
+        SELECT room_type.description AS room_type, count(Booking.booking_id) AS bookings
+        FROM Room
+        join Room_Type on Room.type_id = Room_Type.type_id
+        join Booking on Room.room_id = Booking.room_id
+        GROUP BY Room_Type.type_id, Room_Type.description
+        ORDER BY bookings DESC;
+        """
+        params = tuple()
+        return pd.read_sql(sql, self._connect(), params=params)
 
 
 

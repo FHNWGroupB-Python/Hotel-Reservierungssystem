@@ -1,5 +1,8 @@
 from datetime import date
 
+import pandas
+import pandas as pd
+
 import model
 import data_access
 
@@ -38,3 +41,7 @@ class BookingManager:
 
     def get_all_bookings(self) -> list[model.Booking]:
         return self.__booking_dal.get_all_bookings()
+
+    def get_famous_room_type(self) -> pd.DataFrame:
+        return self.__booking_dal.get_famous_room_type()
+
