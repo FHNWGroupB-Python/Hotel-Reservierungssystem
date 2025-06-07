@@ -38,3 +38,4 @@ class BookingManager:
 
     def get_all_bookings(self) -> list[model.Booking]:
         return self.__booking_dal.get_all_bookings()
+
