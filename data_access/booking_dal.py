@@ -171,12 +171,12 @@ class BookingDAL(BaseDAL):
 
     def get_famous_room_type(self) -> pd.Dataframe:
         sql = """
-        SELECT room_type.description AS room_type, count(Booking.booking_id) AS booking_count
+        SELECT room_type.description AS room_type, count(Booking.booking_id) AS bookings
         FROM Room
         join Room_Type on Room.type_id = Room_Type.type_id
         join Booking on Room.room_id = Booking.room_id
         GROUP BY Room_Type.type_id, Room_Type.description
-        ORDER BY booking_count DESC;
+        ORDER BY bookings DESC;
         """
         params = tuple()
         return pd.read_sql(sql, self._connect(), params=params)
