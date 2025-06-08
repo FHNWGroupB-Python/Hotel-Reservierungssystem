@@ -8,7 +8,7 @@ from data_access.base_dal import BaseDAL
 
 class HotelDAL(BaseDAL):
     def __init__(self, db_path:str = None):
-        super().__init__(db_path)
+        super().__init__(db_path or "database/hotel_reservation.db")
 
     def create_hotel(self,
                      name:str,

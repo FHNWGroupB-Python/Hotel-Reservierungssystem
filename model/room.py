@@ -62,4 +62,3 @@ class Room:
         if not price_per_night > 0:
             raise ValueError("price_per_night must be greater than 0")
         self.__price_per_night = price_per_night
-

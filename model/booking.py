@@ -7,6 +7,8 @@ if TYPE_CHECKING:
     from model.guest import Guest
     from model.room import Room
 
+ROLE_PERMISSIONS = { "admin": {"get_all_bookings"}, "guest": {"check_user_details"} }
+
 class Booking:
     def __init__ (self, booking_id: int, check_in_date: date, check_out_date: date, is_cancelled: bool, total_amount: float):
         self.__booking_id = booking_id

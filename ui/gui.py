@@ -307,3 +307,15 @@ def login_window():
 # Hauptaufruf
 if __name__ == "__main__":
     login_window()
+
+    from business_logic.room_manager import RoomManager
+    from model.user import User
+
+    user = User(role="admin")
+    import os
+
+    base_dir = os.path.dirname(os.path.abspath(__file__))
+    db_path = os.path.join(base_dir, "..", "database", "hotel_reservation.db")
+
+    room_manager = RoomManager(db_path)
+    room_manager.get_all_rooms_with_equipment(user=user)

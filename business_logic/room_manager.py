@@ -2,10 +2,15 @@ from datetime import date
 
 import model
 import data_access
+from datetime import date
+
+import model
+import data_access
+from model.user import requires_permission, User
 
 class RoomManager:
-    def __init__(self):
-        self.__room_dal = data_access.RoomDAL()
+    def __init__(self, db_path=None):
+        self.__room_dal = data_access.RoomDAL(db_path)
 
     def create_room(self, hotel: model.Hotel) -> model.Room:
         return self.__room_dal.create_room(hotel)
@@ -22,5 +27,6 @@ class RoomManager:
     def get_available_rooms_by_date(self, check_in_date: date, check_out_date: date) -> list[model.Room]:
         return self.__room_dal.get_available_rooms_by_date(check_in_date, check_out_date) # TODO Logik für Datum ergänzen damit zuerst geprüft wird welches Zimmer frei ist
 
-    def get_all_rooms_with_equipment(self):
+    @requires_permission("get_all_rooms_with_equipment")
+    def get_all_rooms_with_equipment(self, user: User):
         return self.__room_dal.get_all_rooms_with_equipment()

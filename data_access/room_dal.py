@@ -104,6 +104,59 @@ class RoomDAL(BaseDAL):
             rooms.append(room)
         return rooms
 
+    def get_all_rooms_with_equipment(self):
+        # Room -> list of facilities
+
+        from model.room import Room
+        from model.hotel import Hotel
+        from model.room_type import RoomType
+        from model.facility import Facility
+
+        def get_all_rooms_with_equipment(self):
+            conn = self._get_connection()
+            cursor = conn.cursor()
+
+            query = """
+                SELECT 
+                    r.roomid, r.number, r.price_per_night,
+                    rt.room_type_id, rt.name AS room_type,
+                    h.hotelid, h.name AS hotel_name,
+                    f.facilityid, f.name AS facility_name
+                FROM Room r
+                JOIN RoomType rt ON r.room_type_id = rt.room_type_id
+                JOIN Hotel h ON r.hotelid = h.hotelid
+                LEFT JOIN RoomFacility rf ON r.roomid = rf.roomid
+                LEFT JOIN Facility f ON rf.facilityid = f.facilityid
+                ORDER BY r.roomid
+                """
+
+            cursor.execute(query)
+            rows = cursor.fetchall()
+            print(rows)
+
+            cursor.execute("SELECT COUNT(*) FROM Room")
+            print("Anzahl Zimmer:", cursor.fetchone())
+
+            rooms = {}
+            for row in rows:
+                roomid = row[0]
+
+                if roomid not in rooms:
+                    room_type = RoomType(row[3], row[4], None)
+                    hotel = Hotel(row[5], row[6], None)
+                    room = Room(roomid, row[1], row[2])
+                    room.room_type = room_type
+                    room.hotel = hotel
+                    room.equipment = []
+                    rooms[roomid] = room
+
+                facility_id = row[7]
+                facility_name = row[8]
+                if facility_id and facility_name:
+                    facility = Facility(facility_id, facility_name)
+                    rooms[roomid].equipment.append(facility)
+
+            return list(rooms.values())
 
 
 

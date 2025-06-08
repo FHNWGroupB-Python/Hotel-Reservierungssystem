@@ -5,6 +5,8 @@ import pandas as pd
 
 import model
 import data_access
+from model.user import requires_permission, User
+
 
 class BookingManager:
     def __init__(self):
@@ -18,13 +20,13 @@ class BookingManager:
             check_in: date,
             check_out: date
     ) -> model.Booking:
-       days = (check_out - check_in).days
-       total_amount = days * room.price_per_night
+        days = (check_out - check_in).days
+        total_amount = days * room.price_per_night
 
-       if room.room_type.max_guests < number_of_guests:
-           raise Exception("Room does not have enough capacity")
+        if room.room_type.max_guests < number_of_guests:
+            raise Exception("Room does not have enough capacity")
 
-       return self.__booking_dal.create_booking(guest, room, check_in, check_out, total_amount)
+        return self.__booking_dal.create_booking(guest, room, check_in, check_out, total_amount)
 
     def update_booking(self, booking: model.Booking) -> None:
         self.__booking_dal.update_booking(booking)
@@ -39,7 +41,8 @@ class BookingManager:
     def show_booking_details(self, booking: model.Booking) -> str:
         return booking.get_details()
 
-    def get_all_bookings(self) -> list[model.Booking]:
+    @requires_permission("get_all_bookings")
+    def get_all_bookings(self, user: User) -> list[model.Booking]:
         return self.__booking_dal.get_all_bookings()
 
     def get_famous_room_type(self) -> pd.DataFrame:
