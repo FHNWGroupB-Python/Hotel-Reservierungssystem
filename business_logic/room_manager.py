@@ -15,8 +15,9 @@ class RoomManager:
     def create_room(self, hotel: model.Hotel) -> model.Room:
         return self.__room_dal.create_room(hotel)
 
-    def update_room(self, room: model.Room) -> None:
-        self.__room_dal.update_room(room)
+    @requires_permission("update_room")
+    def update_room(self, room: model.Room, user: User) -> None:
+        self.__room_dal.update_room(room.room_id, room.room_number, room.price_per_night)
 
     def delete_room(self, room: model.Room) -> None:
         self.__room_dal.delete_room(room)

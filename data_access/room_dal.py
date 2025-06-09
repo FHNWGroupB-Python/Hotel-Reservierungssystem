@@ -4,6 +4,8 @@ from datetime import date
 
 import model
 from data_access.base_dal import BaseDAL
+from model import RoomType, Hotel, Room, Facility
+
 
 class RoomDAL(BaseDAL):
     def __init__(self, db_path: str = None):
@@ -41,6 +43,7 @@ class RoomDAL(BaseDAL):
         params = tuple([
             room_number,
             price_per_night,
+            room_id
         ])
         self.execute(sql, params)
 
@@ -107,56 +110,43 @@ class RoomDAL(BaseDAL):
     def get_all_rooms_with_equipment(self):
         # Room -> list of facilities
 
-        from model.room import Room
-        from model.hotel import Hotel
-        from model.room_type import RoomType
-        from model.facility import Facility
+        query = """
+                        SELECT 
+                            r.room_id, r.room_number, r.price_per_night,
+                            rt.type_id, rt.description,
+                            h.hotel_id, h.name AS hotel_name,
+                            f.facility_id, f.facility_name
+                        FROM Room r
+                        JOIN Room_Type rt ON r.room_id = rt.type_id
+                        JOIN Hotel h ON r.hotel_id = h.hotel_id
+                        LEFT JOIN Room_Facilities rf ON r.room_id = rf.room_id
+                        LEFT JOIN Facilities f ON rf.facility_id = f.facility_id
+                        ORDER BY r.room_id
+                        """
 
-        def get_all_rooms_with_equipment(self):
-            conn = self._get_connection()
-            cursor = conn.cursor()
+        rows = self.fetchall(query)
+        print(rows)
 
-            query = """
-                SELECT 
-                    r.roomid, r.number, r.price_per_night,
-                    rt.room_type_id, rt.name AS room_type,
-                    h.hotelid, h.name AS hotel_name,
-                    f.facilityid, f.name AS facility_name
-                FROM Room r
-                JOIN RoomType rt ON r.room_type_id = rt.room_type_id
-                JOIN Hotel h ON r.hotelid = h.hotelid
-                LEFT JOIN RoomFacility rf ON r.roomid = rf.roomid
-                LEFT JOIN Facility f ON rf.facilityid = f.facilityid
-                ORDER BY r.roomid
-                """
+        rooms = {}
+        for row in rows:
+            roomid = row[0]
 
-            cursor.execute(query)
-            rows = cursor.fetchall()
-            print(rows)
+            if roomid not in rooms:
+                room_type = RoomType(row[3], row[4], None)
+                hotel = Hotel(row[5], row[6], None)
+                room = Room(roomid, row[1], row[2])
+                room.room_type = room_type
+                room.hotel = hotel
+                room.equipment = []
+                rooms[roomid] = room
 
-            cursor.execute("SELECT COUNT(*) FROM Room")
-            print("Anzahl Zimmer:", cursor.fetchone())
+            facility_id = row[7]
+            facility_name = row[8]
+            if facility_id and facility_name:
+                facility = Facility(facility_id, facility_name)
+                rooms[roomid].equipment.append(facility)
 
-            rooms = {}
-            for row in rows:
-                roomid = row[0]
-
-                if roomid not in rooms:
-                    room_type = RoomType(row[3], row[4], None)
-                    hotel = Hotel(row[5], row[6], None)
-                    room = Room(roomid, row[1], row[2])
-                    room.room_type = room_type
-                    room.hotel = hotel
-                    room.equipment = []
-                    rooms[roomid] = room
-
-                facility_id = row[7]
-                facility_name = row[8]
-                if facility_id and facility_name:
-                    facility = Facility(facility_id, facility_name)
-                    rooms[roomid].equipment.append(facility)
-
-            return list(rooms.values())
+        return list(rooms.values())
 
 
 

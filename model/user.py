@@ -1,5 +1,5 @@
 ROLE_PERMISSIONS = {
-    "admin": {"get_all_bookings", "get_all_rooms_with_equipment"},
+    "admin": {"get_all_bookings", "get_all_rooms_with_equipment", "update_room"},
     "guest": {},
 }
 
