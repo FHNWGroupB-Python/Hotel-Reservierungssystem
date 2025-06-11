@@ -21,4 +21,4 @@ def requires_permission(action):
 
 class User:
     def __init__(self, role='guest'):
-        self.role = role  # 'admin' or 'guest'
+        self.role = role  # 'admin' oder 'guest'
