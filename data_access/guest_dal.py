@@ -37,4 +37,15 @@ class GuestDAL(BaseDAL):
         params = tuple([guest_id])
         self.execute(sql, params)
 
+    def show_guest(self) -> list[model.Guest]:
+        sql = """
+        SELECT guest_id, first_name, last_name, email FROM Guest
+        """
+        rows = self.fetchall(sql)
+
+        guests: list[model.Guest] = []
+        for guest_id, first_name, last_name, email in rows:
+            guests.append(model.Guest(guest_id, first_name, last_name, email))
+        return guests
+
 

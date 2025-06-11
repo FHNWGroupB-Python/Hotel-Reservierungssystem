@@ -14,3 +14,6 @@ class GuestManager:
 
     def delete_guest(self, guest: model.Guest) -> None:
         self.__guest_dal.delete_guest(guest)
+
+    def show_guest(self) -> list[model.Guest]:
+        return self.__guest_dal.show_guest()
