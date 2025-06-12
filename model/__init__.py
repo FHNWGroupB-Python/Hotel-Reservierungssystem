@@ -6,3 +6,4 @@ from .invoice import Invoice
 from .room import Room
 from .address import Address
 from .room_type import RoomType
+from .review import Review
