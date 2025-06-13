@@ -20,10 +20,11 @@ class BookingDAL(BaseDAL):
         room: model.Room,
         check_in_date: date,
         check_out_date: date,
-        total_amount: float,
-    ) -> Booking:
+        total_amount: float
+    ) -> model.Booking:
         if check_in_date is None or check_out_date is None or total_amount is None:
             raise ValueError("Missing required fields")
+
 
         sql = """
         INSERT INTO Booking (guest_id, room_id, check_in_date, check_out_date, is_cancelled, total_amount)
@@ -39,7 +40,7 @@ class BookingDAL(BaseDAL):
         )
 
         lastrowid, _ = self.execute(sql, params)
-        return Booking(lastrowid, check_in_date, check_out_date, False, total_amount)
+        return model.Booking(lastrowid, check_in_date, check_out_date, False, total_amount)
 
     def read_booking_by_id(self, booking_id: int) -> Booking | None:
         if booking_id is None:
@@ -106,33 +107,6 @@ class BookingDAL(BaseDAL):
             booking.guest = guest
             bookings.append(booking)
         return bookings
-
-    def calculate_dynamic_price(self, base_price: float, check_in_date: date) -> float: # TODO gehört in den Manager
-        high_season = {6, 7, 8}  # Juni, Juli, August
-        off_season = {1, 2, 11}  # Januar, Februar, November
-        month = check_in_date.month
-
-        if month in high_season:
-            return base_price * 1.2  # 20% Aufschlag
-        elif month in off_season:
-            return base_price * 0.85  # 15% Rabatt
-        else:
-            return base_price
-
-    def create_booking(
-            self,
-            guest: model.Guest,
-            room: model.Room,
-            check_in_date: date,
-            check_out_date: date,
-            total_amount: float,
-            base_amount: float  # Grundlage für Preis
-    ) -> Booking:
-        if check_in_date is None or check_out_date is None or total_amount is None:
-            raise ValueError("Missing required fields")
-
-        # Berechnung des dynamischen Preises
-        total_amount = self.calculate_dynamic_price(base_amount, check_in_date) # TODO Logik in den Manager versetzen
 
     def read_all_bookings(self) -> list[Booking]:
         sql = """

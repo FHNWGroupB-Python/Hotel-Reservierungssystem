@@ -1,4 +1,4 @@
-from datetime import date
+from datetime import date, timedelta
 
 import pandas
 import pandas as pd
@@ -20,13 +20,33 @@ class BookingManager:
             check_in: date,
             check_out: date
     ) -> model.Booking:
-        days = (check_out - check_in).days
-        total_amount = days * room.price_per_night
 
         if room.room_type.max_guests < number_of_guests:
             raise Exception("Room does not have enough capacity")
 
+        current_date = check_in
+        total_amount = 0
+
+        while current_date < check_out:
+            daily_price = self.calculate_dynamic_price(room.price_per_night, current_date)
+            total_amount += daily_price
+            current_date += timedelta(days=1)
+
         return self.__booking_dal.create_booking(guest, room, check_in, check_out, total_amount)
+
+
+    def calculate_dynamic_price(self, price_per_night: float, check_in_date: date) -> float:
+        high_season = {6, 7, 8}  # Juni, Juli, August
+        off_season = {1, 2, 11}  # Januar, Februar, November
+        month = check_in_date.month
+
+        if month in high_season:
+            return price_per_night * 1.2  # 20% Aufschlag
+        elif month in off_season:
+            return price_per_night * 0.85  # 15% Rabatt
+        else:
+            return price_per_night
+
 
     def update_booking(self, booking: model.Booking) -> None:
         self.__booking_dal.update_booking(booking)
@@ -47,4 +67,6 @@ class BookingManager:
 
     def get_famous_room_type(self) -> pd.DataFrame:
         return self.__booking_dal.get_famous_room_type()
+
+
 

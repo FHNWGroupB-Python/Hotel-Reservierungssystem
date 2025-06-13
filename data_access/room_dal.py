@@ -1,7 +1,5 @@
 from __future__ import annotations
-
 from datetime import date
-
 import model
 from data_access.base_dal import BaseDAL
 from model import RoomType, Hotel, Room, Facility
@@ -107,46 +105,31 @@ class RoomDAL(BaseDAL):
             rooms.append(room)
         return rooms
 
-    def get_all_rooms_with_equipment(self):
-        # Room -> list of facilities
-
+    def get_all_rooms_with_equipment(self) -> list[model.Room]:
         query = """
-                        SELECT 
-                            r.room_id, r.room_number, r.price_per_night,
-                            rt.type_id, rt.description,
-                            h.hotel_id, h.name AS hotel_name,
-                            f.facility_id, f.facility_name
-                        FROM Room r
-                        JOIN Room_Type rt ON r.room_id = rt.type_id
-                        JOIN Hotel h ON r.hotel_id = h.hotel_id
-                        LEFT JOIN Room_Facilities rf ON r.room_id = rf.room_id
-                        LEFT JOIN Facilities f ON rf.facility_id = f.facility_id
-                        ORDER BY r.room_id
-                        """
-
+        SELECT 
+        r.room_id, r.room_number, r.price_per_night,
+        rt.type_id, rt.description,
+        h.hotel_id, h.name AS hotel_name,
+        f.facility_id, f.facility_name
+        FROM Room r
+        JOIN Room_Type rt ON r.room_id = rt.type_id
+        JOIN Hotel h ON r.hotel_id = h.hotel_id
+        LEFT JOIN Room_Facilities rf ON r.room_id = rf.room_id
+        LEFT JOIN Facilities f ON rf.facility_id = f.facility_id
+        ORDER BY r.room_id
+        """
         rows = self.fetchall(query)
-        print(rows)
 
-        rooms = {}
-        for row in rows:
-            roomid = row[0]
-
-            if roomid not in rooms:
-                room_type = RoomType(row[3], row[4], None)
-                hotel = Hotel(row[5], row[6], None)
-                room = Room(roomid, row[1], row[2])
-                room.room_type = room_type
-                room.hotel = hotel
-                room.equipment = []
-                rooms[roomid] = room
-
-            facility_id = row[7]
-            facility_name = row[8]
-            if facility_id and facility_name:
-                facility = Facility(facility_id, facility_name)
-                rooms[roomid].equipment.append(facility)
-
-        return list(rooms.values())
-
-
+        rooms: list[model.Room] = []
+        for room_id, room_number, price_per_night, type_id, description, hotel_id, hotel_name, facility_id, facility_name in rows:
+            room_type = RoomType(type_id, description, None)
+            hotel = Hotel(hotel_id, hotel_name, None)
+            room = Room(room_id, room_number, price_per_night)
+            room.room_type = room_type
+            room.hotel = hotel
+            room.facility = Facility(facility_id, facility_name)
+            room.facility.room = room
+            rooms.append(room)
+        return rooms
 
