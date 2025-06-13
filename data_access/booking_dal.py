@@ -126,7 +126,7 @@ class BookingDAL(BaseDAL):
             check_in_date: date,
             check_out_date: date,
             total_amount: float,
-            base_amount=float,  # Grundlage für Preis
+            base_amount:float  # Grundlage für Preis
     ) -> Booking:
         if check_in_date is None or check_out_date is None or total_amount is None:
             raise ValueError("Missing required fields")
