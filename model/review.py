@@ -20,6 +20,14 @@ class Review:
         return self.__review_id
 
     @property
+    def hotel(self) -> Hotel:
+        return self.__hotel
+
+    @property
+    def guest(self) -> Guest:
+        return self.__guest
+
+    @property
     def rating(self) -> int:
         return self.__rating
 
