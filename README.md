@@ -35,13 +35,13 @@ Die Projektstruktur wurde vorgegeben und wird auch n-Tier Struktur genannt.
 ## Anleitung
 
     1. Öffnen des Notebooks 
-![Anleitung](images/anleitung_1.png)
+![Bild1](images/anleitung_1.png)
 
     2. Auf den Button "Run" klicken um die Datenbank zu verbinden
-![Anleitung](images/anleitung_2.png)
+![Bild2](images/anleitung_2.png)
 
     3. Beliebige Userstory anwählen und mit "Run" laufen lassen, danach Eingaben mit "OK" bestätigen
-![Anleitung](images/anleitung_3.png)
+![Bild3](images/anleitung_3.png)
 
 
 ## N-Tier Struktur
