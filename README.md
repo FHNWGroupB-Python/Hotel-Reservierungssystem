@@ -88,3 +88,6 @@ Durch diese klar getrennte Aufteilung können Änderungen an einer Schicht, etwa
 	3.	Über Business-Logic-Manager auf DAL zugreifen
 	4.	Ergebnisse im Notebook anzeigen
 
+## Entity Relationship Diagram
+Dieses Datenbankmodell gehört der FHNW und wurde für das Projekt zur Verfügung gestellt als Sample.
+![datenbank](images/erd.png)
