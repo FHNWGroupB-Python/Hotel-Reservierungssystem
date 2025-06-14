@@ -9,7 +9,15 @@ class HotelManager:
     def __init__(self) -> None:
         self.__hotel_dal = data_access.HotelDAL()
 
-    def create_hotel(self, name: str, stars: int, address) -> model.Hotel:
+    def create_hotel(self, name: str, stars: int, address:model.Address) -> model.Hotel:
+        all_hotels = self.__hotel_dal.get_all_hotel_info()
+        for hotel in all_hotels:
+            print(f"Hotel: {hotel.name}, Adresse: {hotel.address.street}, {hotel.address.city}, {hotel.address.zip_code}")
+            if hotel.name.strip().lower() == name.strip().lower() \
+                and hotel.address.street.strip().lower() == address.street.strip().lower() \
+                and hotel.address.city.strip().lower() == address.city.strip().lower() \
+                and hotel.address.zip_code == address.zip_code:
+                raise ValueError(f"Das Hotel '{hotel.name}' ist bereits vorhanden.")
         return self.__hotel_dal.create_hotel(name, stars, address) # TODO Logik einsetzen ob das Hotel bereits existiert
 
     def update_hotel(self, hotel:model.Hotel) -> model.Hotel:
