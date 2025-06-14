@@ -43,6 +43,9 @@ Die Projektstruktur wurde vorgegeben und wird auch n-Tier Struktur genannt.
     3. Beliebige Userstory anwählen und mit "Run" laufen lassen, danach Eingaben mit "OK" bestätigen
 ![Bild3](images/anleitung_3.png)
 
+    4. Output wird unterhalb des Codes angezeigt
+![Bild4](images/anleitung_4.png)
+
 
 ## N-Tier Struktur
 
